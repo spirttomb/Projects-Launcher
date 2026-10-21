@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#001b35">
-    <title>Projects</title>
+    <title>Sheets Editor</title>
     <style>
         @font-face {
             font-family: 'Apercu Regular Pro';
             src: url('apercu_regular_pro.otf') format('opentype'),
-                 url('https://spirttomb.github.io/Checklist-Tracker/apercu_regular_pro.otf') format('opentype');
+                 url('https://spirttomb.github.io/Lineup-Generator/apercu_regular_pro.otf') format('opentype');
             font-weight: normal;
             font-style: normal;
             font-display: swap;
@@ -27,395 +27,346 @@
             --muted: #5C768D;
             --line: #e1e8f0;
             --line-strong: #c7d3e0;
-            --tint: #f5f8fb;
+            --surface: #ffffff;
             --canvas: #edf1f6;
-            --cw: 280px;
-            --ch: 364px;
+            --tint: #f5f8fb;
+            --radius: 18px;
             --shadow-sm: 0 1px 2px rgba(0, 27, 53, 0.06), 0 2px 6px rgba(0, 27, 53, 0.06);
+            --shadow-md: 0 12px 32px -12px rgba(0, 27, 53, 0.35);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-
         body {
             font-family: 'Apercu Regular Pro', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background:
-                radial-gradient(1200px 420px at 85% -10%, rgba(245, 158, 11, 0.16), transparent 60%),
-                linear-gradient(180deg, var(--navy-800) 0%, var(--navy-900) 65%, var(--navy-950) 100%);
-            background-attachment: fixed;
-            color: #fff;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            -webkit-font-smoothing: antialiased;
-            overflow-x: hidden;
+            background: var(--canvas); color: var(--ink); min-height: 100vh;
+            -webkit-font-smoothing: antialiased; overflow-x: hidden;
         }
+        body.has-savebar { padding-bottom: 5.5rem; }
         input, select, textarea, button { font-family: inherit; }
         button { -webkit-tap-highlight-color: transparent; }
         svg { flex-shrink: 0; }
-        .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
         /* ---------- App bar ---------- */
-        .appbar { background: var(--navy-950); position: sticky; top: 0; z-index: 60; }
-        .appbar-inner { max-width: 1200px; margin: 0 auto; padding: 0.65rem 1.5rem; display: flex; align-items: center; gap: 1rem; }
-        .brand { display: flex; align-items: center; gap: 0.7rem; }
-        .brand-mark {
-            width: 36px; height: 36px; border-radius: 11px; background: var(--gold); color: var(--navy-950);
-            display: grid; place-items: center; box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.12);
-        }
+        .appbar { background: var(--navy-950); color: #fff; position: sticky; top: 0; z-index: 60; }
+        .appbar-inner { max-width: 1100px; margin: 0 auto; padding: 0.65rem 1.5rem; display: flex; align-items: center; gap: 1rem; }
+        .brand { display: flex; align-items: center; gap: 0.7rem; color: #fff; text-decoration: none; }
+        .brand-mark { width: 36px; height: 36px; border-radius: 11px; background: var(--gold); color: var(--navy-950); display: grid; place-items: center; box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.12); }
         .brand-name { font-weight: 800; font-size: 1.08rem; letter-spacing: -0.01em; line-height: 1; }
         .brand-name small { display: block; font-weight: 600; font-size: 0.66rem; color: #8ea6bf; letter-spacing: 0.16em; text-transform: uppercase; margin-top: 0.25rem; }
-        .appbar-actions { margin-left: auto; display: flex; align-items: center; gap: 0.35rem; }
-        .icon-btn {
-            width: 40px; height: 40px; border-radius: 11px; border: none; background: transparent; color: #c6d5e4;
-            display: grid; place-items: center; cursor: pointer; transition: background 0.15s, color 0.15s;
-        }
+        .appbar-actions { margin-left: auto; display: flex; align-items: center; gap: 0.3rem; }
+        .icon-btn { width: 40px; height: 40px; border-radius: 11px; border: none; background: transparent; color: #c6d5e4; display: grid; place-items: center; cursor: pointer; text-decoration: none; }
         .icon-btn:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
-        .bar-add {
-            display: inline-flex; align-items: center; gap: 0.4rem; border: none; border-radius: 11px; cursor: pointer;
-            background: var(--gold); color: var(--navy-950); font-weight: 800; font-size: 0.9rem; padding: 0.55rem 0.9rem;
-            box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.12);
-        }
-        .bar-add:hover { background: var(--gold-hi); }
+        .who { display: none; align-items: center; gap: 0.5rem; color: #c6d5e4; font-size: 0.88rem; font-weight: 700; margin-right: 0.2rem; }
+        .who.on { display: flex; }
+        .who .chip-avatar { width: 28px; height: 28px; font-size: 0.7rem; }
 
         /* ---------- Hero ---------- */
-        .hero { max-width: 1200px; width: 100%; margin: 0 auto; padding: 1.8rem 1.5rem 0.2rem; text-align: center; }
-        .eyebrow { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.74rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold-hi); }
-        .hero h1 { font-size: 2.1rem; font-weight: 800; letter-spacing: -0.02em; margin-top: 0.35rem; line-height: 1.1; }
+        .hero {
+            background: radial-gradient(1200px 300px at 85% -40%, rgba(245, 158, 11, 0.16), transparent 60%), linear-gradient(180deg, var(--navy-800), var(--navy-900));
+            color: #fff; padding: 1.6rem 1.5rem 4.6rem;
+        }
+        .hero-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: flex-end; gap: 1rem; }
+        .back-btn { width: 42px; height: 42px; border-radius: 12px; border: none; background: rgba(255, 255, 255, 0.1); color: #fff; display: none; place-items: center; cursor: pointer; flex-shrink: 0; margin-bottom: 0.1rem; }
+        .back-btn.on { display: grid; }
+        .back-btn:hover { background: rgba(255, 255, 255, 0.18); }
+        .eyebrow { font-size: 0.74rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold-hi); }
+        .hero h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.02em; margin-top: 0.3rem; line-height: 1.1; }
         .hero-sub { color: #aebfd1; font-size: 0.92rem; margin-top: 0.4rem; }
 
-        /* ---------- Carousel ---------- */
-        main { flex: 1; display: flex; flex-direction: column; }
-        .stage {
-            position: relative; width: 100%; height: calc(var(--ch) + 84px);
-            perspective: 1300px; perspective-origin: 50% 42%;
-            touch-action: pan-y; user-select: none; -webkit-user-select: none; cursor: grab; outline: none;
-            overflow: hidden;
-        }
-        .stage.dragging { cursor: grabbing; }
-        .stage:focus-visible .pcard.front .pc-inner { box-shadow: 0 0 0 3px var(--gold), 0 0 0 7px rgba(245, 158, 11, 0.35), 0 34px 70px -24px rgba(0, 0, 0, 0.75); }
-        .ring { position: absolute; left: 50%; top: calc(var(--ch) / 2 + 26px); width: 0; height: 0; transform-style: preserve-3d; }
-        .floor {
-            position: absolute; left: 50%; bottom: 14px; width: calc(var(--cw) * 2.5); height: 64px; transform: translateX(-50%);
-            background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.42) 0%, rgba(0, 0, 0, 0.18) 45%, transparent 72%);
-            pointer-events: none;
-        }
+        .workspace { max-width: 1100px; margin: -3.25rem auto 0; padding: 0 1.5rem 3rem; position: relative; }
 
-        .pcard {
-            position: absolute; left: 0; top: 0;
-            width: var(--cw); height: var(--ch);
-            margin-left: calc(var(--cw) / -2); margin-top: calc(var(--ch) / -2);
-            backface-visibility: hidden; -webkit-backface-visibility: hidden;
-            will-change: transform, opacity;
-        }
-        .pc-inner {
-            position: relative; width: 100%; height: 100%;
-            background: #fff; color: var(--ink);
-            border: 10px solid var(--navy-900); border-radius: 24px; overflow: hidden;
-            display: flex; flex-direction: column;
-            box-shadow: 0 30px 60px -25px rgba(0, 0, 0, 0.65);
-            transition: box-shadow 0.3s, transform 0.28s ease, opacity 0.28s ease;
-        }
-        .pc-inner::after {
-            content: ""; position: absolute; inset: 0; pointer-events: none;
-            background: rgba(0, 27, 53, var(--dim, 0)); transition: background 0.1s;
-        }
-        .pcard.front .pc-inner { box-shadow: 0 0 0 3px var(--gold), 0 34px 70px -24px rgba(0, 0, 0, 0.75); }
-        .pcard.launching .pc-inner { transform: scale(1.07); opacity: 0; }
-        .pcard.fresh .pc-inner { animation: freshPop 0.9s cubic-bezier(0.2, 0.9, 0.3, 1.2); }
-        @keyframes freshPop {
-            0% { transform: scale(0.82); box-shadow: 0 0 0 0 var(--gold); }
-            55% { transform: scale(1.04); box-shadow: 0 0 0 10px rgba(245, 158, 11, 0.35); }
-            100% { transform: scale(1); }
-        }
+        /* ---------- Cards ---------- */
+        .card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow-sm); margin-bottom: 1.25rem; }
+        .card-head { display: flex; align-items: center; gap: 0.8rem; padding: 1.15rem 1.3rem 0.35rem; flex-wrap: wrap; }
+        .card-head .push { margin-left: auto; }
+        .card-head > div { min-width: 0; }
+        .card-title { font-size: 1.08rem; font-weight: 800; color: var(--navy-900); letter-spacing: -0.01em; }
+        .card-sub { color: var(--muted); font-size: 0.84rem; margin-top: 0.1rem; }
+        .card-body { padding: 0.85rem 1.3rem 1.3rem; }
+        .count-pill { background: var(--gold-soft); color: #92400e; font-weight: 800; font-size: 0.78rem; padding: 0.3rem 0.7rem; border-radius: 999px; white-space: nowrap; }
+        .tile { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; flex-shrink: 0; }
+        .tile.staff { background: #fef3c7; color: #a16207; }
+        .tile.check { background: #dbeafe; color: #1d4ed8; }
+        .tile.rules { background: #ede9fe; color: #6d28d9; }
 
-        .pc-top {
-            position: relative; flex: 0 0 45%; padding: 18px;
-            display: flex; flex-direction: column; justify-content: space-between; overflow: hidden;
-            background:
-                radial-gradient(240px 170px at 100% 0%, var(--accent-soft), transparent 70%),
-                linear-gradient(160deg, var(--navy-800), var(--navy-950));
-            border-bottom: 4px solid var(--accent);
+        .home-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; align-items: start; }
+        .home-grid .card { margin-bottom: 0; }
+        .home-grid .wide { grid-column: 1 / -1; }
+        .area-group { margin-top: 0.9rem; }
+        .area-group:first-child { margin-top: 0.1rem; }
+        .group-label { font-size: 0.74rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--navy-800); margin-bottom: 0.45rem; }
+        .area-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 0.5rem; }
+        .area-btn {
+            display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; text-align: left;
+            background: var(--tint); border: 1.5px solid var(--line); border-radius: 12px; padding: 0.7rem 0.85rem;
+            font-weight: 700; font-size: 0.95rem; color: var(--navy-900); cursor: pointer;
         }
-        .pc-mark { position: absolute; right: -22px; bottom: -30px; color: #fff; opacity: 0.07; transform: rotate(-12deg); }
-        .pc-mark svg { width: 150px; height: 150px; }
-        .pc-row { display: flex; justify-content: space-between; align-items: flex-start; position: relative; }
-        .pc-tile {
-            width: 64px; height: 64px; border-radius: 18px; display: grid; place-items: center;
-            background: var(--accent); color: var(--accent-ink);
-            box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.14), 0 12px 26px -12px var(--accent);
-        }
-        .pc-tile svg { width: 32px; height: 32px; }
-        .pc-num { font-weight: 800; font-size: 0.72rem; letter-spacing: 0.16em; color: #8ea6bf; padding-top: 4px; }
-        .pc-host {
-            position: relative; align-self: flex-start; max-width: 100%;
-            overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-            background: rgba(255, 255, 255, 0.1); color: #c6d5e4;
-            font-size: 0.74rem; font-weight: 700; padding: 0.3rem 0.65rem; border-radius: 999px;
-        }
-        .pc-body { flex: 1; min-height: 0; padding: 16px 18px 8px; }
-        .pc-body h3 { font-size: 1.25rem; font-weight: 800; color: var(--navy-900); letter-spacing: -0.01em; line-height: 1.2; }
-        .pc-body p {
-            color: var(--muted); font-size: 0.88rem; line-height: 1.4; margin-top: 0.35rem;
-            display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
-        }
-        .pc-foot { display: flex; gap: 8px; padding: 0 14px 14px; }
-        .pc-open {
-            flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 0.45rem;
-            background: var(--gold); color: var(--navy-950); border: none; border-radius: 12px;
-            padding: 0.78rem 1rem; font-weight: 800; font-size: 0.98rem; cursor: pointer;
-            box-shadow: 0 8px 18px -8px rgba(245, 158, 11, 0.8);
-        }
-        .pc-open:hover { background: var(--gold-hi); }
-        .pc-edit {
-            width: 46px; border-radius: 12px; border: 1.5px solid var(--line-strong); background: #fff;
-            color: var(--navy-900); display: grid; place-items: center; cursor: pointer;
-        }
-        .pc-edit:hover { border-color: var(--navy-800); }
+        .area-btn:hover { border-color: var(--gold); background: #fff; }
+        .area-btn svg { color: var(--muted); }
+        .note { color: var(--muted); font-size: 0.83rem; line-height: 1.45; }
 
-        /* "Add a project" card */
-        .pcard.add .pc-inner {
-            background: rgba(255, 255, 255, 0.06); color: #fff;
-            border: 2.5px dashed rgba(255, 255, 255, 0.38);
-            align-items: center; justify-content: center; text-align: center; gap: 0.9rem; padding: 1.5rem;
-            box-shadow: none;
+        /* ---------- Fields ---------- */
+        .field, .sel {
+            width: 100%; background: var(--tint); border: 1.5px solid var(--line); border-radius: 12px;
+            padding: 0.65rem 0.8rem; font-size: 0.98rem; color: var(--ink); transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
         }
-        .pcard.add.front .pc-inner { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.25); }
-        .add-circle {
-            width: 76px; height: 76px; border-radius: 22px; background: var(--gold); color: var(--navy-950);
-            display: grid; place-items: center; box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.14), 0 14px 30px -12px rgba(245, 158, 11, 0.8);
-        }
-        .add-title { font-size: 1.25rem; font-weight: 800; }
-        .add-sub { color: #aebfd1; font-size: 0.88rem; line-height: 1.4; max-width: 15rem; }
+        .sel { padding-right: 0.4rem; }
+        textarea.field { resize: none; overflow: hidden; min-height: 2.6rem; line-height: 1.35; }
+        .field:focus, .sel:focus { outline: none; border-color: var(--gold); background: #fff; box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.18); }
+        .field.bad { border-color: #ef4444; background: #fef2f2; }
+        .lbl { display: block; font-size: 0.78rem; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin: 0 0 0.3rem; }
+        .search-field { position: relative; flex: 1; min-width: 12rem; }
+        .search-field svg { position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
+        .search-field .field { padding-left: 2.5rem; }
 
-        /* ---------- Controls ---------- */
-        .controls { display: flex; align-items: center; justify-content: center; gap: 14px; padding: 0 1rem; }
-        .nav-btn {
-            width: 48px; height: 48px; border-radius: 14px; border: none; cursor: pointer;
-            background: rgba(255, 255, 255, 0.1); color: #fff; display: grid; place-items: center;
-            transition: background 0.15s;
-        }
-        .nav-btn:hover { background: rgba(255, 255, 255, 0.18); }
-        .dots { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: center; max-width: 60vw; }
-        .dot {
-            width: 9px; height: 9px; border-radius: 999px; border: none; padding: 0; cursor: pointer;
-            background: rgba(255, 255, 255, 0.3); transition: width 0.25s, background 0.25s;
-        }
-        .dot.on { width: 26px; background: var(--gold); }
-        .dot.plus { background: transparent; box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.45); }
-        .dot.plus.on { background: transparent; box-shadow: inset 0 0 0 2px var(--gold); }
-        .hint { text-align: center; color: #8ea6bf; font-size: 0.82rem; margin: 1rem 0 1.6rem; padding: 0 1rem; }
-        .hint kbd { font-family: inherit; font-weight: 800; color: #c6d5e4; background: rgba(255, 255, 255, 0.1); border-radius: 6px; padding: 0.05rem 0.4rem; }
+        .seg { display: inline-flex; background: var(--canvas); border-radius: 12px; padding: 3px; gap: 2px; flex-wrap: wrap; }
+        .seg button { border: none; background: transparent; padding: 0.45rem 0.8rem; border-radius: 9px; font-weight: 700; font-size: 0.87rem; color: var(--muted); cursor: pointer; }
+        .seg button:hover { color: var(--navy-900); }
+        .seg button.on { background: #fff; color: var(--navy-900); box-shadow: var(--shadow-sm); }
 
-        /* ---------- Sheets ---------- */
-        .modal-overlay {
-            position: fixed; inset: 0; background: rgba(0, 27, 53, 0.55); backdrop-filter: blur(3px);
-            display: flex; align-items: center; justify-content: center; z-index: 1000;
-            opacity: 0; pointer-events: none; transition: opacity 0.2s;
-        }
-        .modal-overlay.active { opacity: 1; pointer-events: auto; }
-        #editModal { z-index: 1100; }
-        .sheet {
-            background: #fff; color: var(--ink); border-radius: 22px; width: 94%; max-width: 560px; max-height: 88vh; overflow: auto;
-            box-shadow: 0 30px 70px -20px rgba(0, 0, 0, 0.55); transform: translateY(14px); transition: transform 0.25s;
-        }
-        .modal-overlay.active .sheet { transform: none; }
-        .sheet-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.1rem 1.3rem; border-bottom: 1px solid var(--line); position: sticky; top: 0; background: #fff; z-index: 2; }
-        .sheet-head h3 { font-size: 1.15rem; font-weight: 800; color: var(--navy-900); }
-        .sheet-close { width: 36px; height: 36px; border-radius: 50%; border: none; background: var(--canvas); cursor: pointer; color: var(--navy-900); display: grid; place-items: center; }
-        .sheet-close:hover { background: var(--line-strong); }
-        .sheet-body { padding: 1.2rem 1.3rem 1.4rem; }
-
-        .lbl { display: block; font-weight: 800; color: var(--navy-900); font-size: 0.9rem; margin: 1rem 0 0.4rem; }
-        .lbl:first-child { margin-top: 0; }
-        .lbl span { color: var(--muted); font-weight: 500; }
-        .field {
-            width: 100%; background: var(--tint); border: 1.5px solid var(--line); border-radius: 13px;
-            padding: 0.8rem 0.95rem; font-size: 1rem; color: var(--ink); transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
-        }
-        .field:focus { outline: none; border-color: var(--gold); background: #fff; box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.18); }
-
-        .preview {
-            display: flex; align-items: center; gap: 0.9rem; padding: 0.85rem; border-radius: 16px;
-            background: linear-gradient(160deg, var(--navy-800), var(--navy-950)); color: #fff; margin-bottom: 0.4rem;
-            border-bottom: 4px solid var(--accent);
-        }
-        .preview .pc-tile { width: 52px; height: 52px; border-radius: 15px; }
-        .preview .pc-tile svg { width: 26px; height: 26px; }
-        .preview b { display: block; font-size: 1.05rem; }
-        .preview small { display: block; color: #aebfd1; font-size: 0.8rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .preview > div { min-width: 0; }
-
-        .icon-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.4rem; }
-        .ico {
-            aspect-ratio: 1; border-radius: 11px; border: 1.5px solid var(--line); background: var(--tint);
-            color: var(--navy-900); display: grid; place-items: center; cursor: pointer;
-        }
-        .ico svg { width: 22px; height: 22px; }
-        .ico:hover { border-color: var(--line-strong); background: #fff; }
-        .ico.on { background: var(--navy-900); border-color: var(--navy-900); color: var(--gold-hi); }
-        .swatches { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-        .sw {
-            width: 38px; height: 38px; border-radius: 50%; border: 3px solid #fff; cursor: pointer;
-            box-shadow: 0 0 0 1.5px var(--line-strong); display: grid; place-items: center;
-        }
-        .sw.on { box-shadow: 0 0 0 3px var(--navy-900); }
-        .sw svg { opacity: 0; }
-        .sw.on svg { opacity: 1; }
-
-        .form-error { margin-top: 0.8rem; padding: 0.55rem 0.75rem; border-radius: 10px; background: #fef2f2; color: #b91c1c; font-size: 0.88rem; font-weight: 700; }
-        .form-error:empty { display: none; }
-        .sheet-actions { display: flex; gap: 0.5rem; align-items: center; margin-top: 1.3rem; flex-wrap: wrap; }
-        .sheet-actions .spacer { flex: 1; }
-
+        /* ---------- Buttons ---------- */
         .btn-primary {
-            background: var(--gold); color: var(--navy-950); border: none; border-radius: 13px; padding: 0.8rem 1.3rem;
-            font-weight: 800; font-size: 1rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+            background: var(--gold); color: var(--navy-950); border: none; border-radius: 12px; padding: 0.75rem 1.2rem;
+            font-weight: 800; font-size: 0.98rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
             box-shadow: 0 8px 18px -8px rgba(245, 158, 11, 0.8);
         }
         .btn-primary:hover { background: var(--gold-hi); }
+        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
         .btn-primary.block { width: 100%; }
-        .btn-secondary {
-            background: #fff; border: 1.5px solid var(--line-strong); color: var(--navy-900); border-radius: 12px;
-            padding: 0.72rem 1.1rem; font-weight: 700; font-size: 0.95rem; cursor: pointer;
+        .btn-secondary, .btn-dark {
+            border-radius: 11px; padding: 0.6rem 0.95rem; font-weight: 700; font-size: 0.9rem; cursor: pointer;
+            display: inline-flex; align-items: center; gap: 0.4rem; white-space: nowrap;
         }
+        .btn-secondary { background: #fff; border: 1.5px solid var(--line-strong); color: var(--navy-900); }
         .btn-secondary:hover { border-color: var(--navy-800); }
-        .btn-danger { background: #fff; border: 1.5px solid #fecaca; color: #dc2626; border-radius: 12px; padding: 0.72rem 1.1rem; font-weight: 700; font-size: 0.95rem; cursor: pointer; }
-        .btn-danger:hover { background: #fef2f2; }
+        .btn-secondary.on { background: var(--navy-900); border-color: var(--navy-900); color: var(--gold-hi); }
+        .btn-secondary:disabled { opacity: 0.45; cursor: default; }
+        .btn-dark { background: var(--navy-900); border: 1.5px solid var(--navy-900); color: #fff; }
+        .btn-dark:hover { background: var(--navy-700); }
         .link-btn { background: none; border: none; color: var(--navy-700); font-weight: 700; font-size: 0.87rem; cursor: pointer; padding: 0.35rem 0.15rem; }
         .link-btn:hover { text-decoration: underline; }
+        .link-btn.danger { color: #dc2626; }
+        .icon-x { border: none; background: transparent; width: 34px; height: 34px; border-radius: 9px; cursor: pointer; color: var(--muted); display: grid; place-items: center; flex-shrink: 0; }
+        .icon-x:hover { background: #fee2e2; color: #dc2626; }
+        .add-dashed { width: 100%; border: 1.5px dashed var(--line-strong); background: transparent; color: var(--navy-700); border-radius: 12px; padding: 0.75rem; font-weight: 800; cursor: pointer; font-size: 0.95rem; }
+        .add-dashed:hover { border-color: var(--gold); background: var(--gold-soft); color: #78350f; }
+        .add-dashed.small { width: auto; padding: 0.45rem 0.8rem; font-size: 0.85rem; }
 
-        /* Manage list */
-        .mlist { border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
-        .mrow { display: flex; align-items: center; gap: 0.75rem; padding: 0.65rem 0.75rem; border-top: 1px solid var(--line); }
-        .mrow:first-child { border-top: none; }
-        .mrow .pc-tile { width: 40px; height: 40px; border-radius: 12px; box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.14); }
-        .mrow .pc-tile svg { width: 20px; height: 20px; }
-        .mtext { flex: 1; min-width: 0; }
-        .mtext b { display: block; color: var(--navy-900); }
-        .mtext small { display: block; color: var(--muted); font-size: 0.8rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .mbtns { display: flex; gap: 0.2rem; }
-        .mbtn { width: 34px; height: 34px; border-radius: 9px; border: none; background: transparent; color: var(--muted); display: grid; place-items: center; cursor: pointer; }
-        .mbtn:hover { background: var(--canvas); color: var(--navy-900); }
-        .mbtn.del:hover { background: #fee2e2; color: #dc2626; }
-        .mbtn:disabled { opacity: 0.3; cursor: default; background: transparent; }
-        .mempty { padding: 1.2rem; text-align: center; color: var(--muted); font-size: 0.9rem; }
-        .set-row { display: flex; align-items: center; gap: 0.9rem; margin-top: 1rem; padding: 0.85rem; border-radius: 14px; background: var(--tint); }
-        .set-row > div { flex: 1; }
-        .set-row b { color: var(--navy-900); }
-        .set-row small { display: block; color: var(--muted); font-size: 0.82rem; margin-top: 0.1rem; }
-        .switch { position: relative; width: 46px; height: 26px; border: none; border-radius: 999px; background: #cbd5e1; cursor: pointer; flex-shrink: 0; transition: background 0.2s; }
-        .switch i { position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25); transition: transform 0.2s, background 0.2s; }
-        .switch.on { background: var(--navy-800); }
-        .switch.on i { transform: translateX(20px); background: var(--gold); }
-        .manage-foot { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.5rem; align-items: center; }
+        .toolbar { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; padding: 0.4rem 1.3rem 0.9rem; }
+
+        /* ---------- Staff ---------- */
+        .people { border-top: 1px solid var(--line); }
+        .person { border-bottom: 1px solid var(--line); }
+        .person:last-child { border-bottom: none; }
+        .p-head {
+            width: 100%; display: flex; align-items: center; gap: 0.75rem; padding: 0.7rem 1.3rem; background: none; border: none;
+            text-align: left; cursor: pointer; color: var(--ink);
+        }
+        .p-head:hover { background: var(--tint); }
+        .person.open > .p-head { background: var(--tint); }
+        .chip-avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--navy-900); color: var(--gold-hi); display: grid; place-items: center; font-size: 0.75rem; font-weight: 800; flex-shrink: 0; }
+        .person.leader .chip-avatar { background: var(--gold); color: var(--navy-950); }
+        .p-name { font-weight: 800; color: var(--navy-900); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .p-name.empty { color: #b91c1c; font-style: italic; font-weight: 600; }
+        .tag { font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; padding: 0.18rem 0.45rem; border-radius: 6px; white-space: nowrap; }
+        .tag.leader { background: var(--gold-soft); color: #92400e; }
+        .tag.boh { background: #e2e8f0; color: #334155; }
+        .tag.new { background: #dcfce7; color: #166534; }
+        .tag.edit { background: #dbeafe; color: #1e40af; }
+        .tag.bad { background: #fee2e2; color: #b91c1c; }
+        .p-pin { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-weight: 700; color: var(--muted); font-size: 0.9rem; min-width: 3.4rem; text-align: right; }
+        .chev { color: var(--muted); transition: transform 0.2s; }
+        .person.open .chev { transform: rotate(180deg); }
+        .p-form { padding: 0.4rem 1.3rem 1.2rem; background: var(--tint); }
+        .p-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 0.75rem; }
+        .p-row { display: flex; gap: 1.25rem; flex-wrap: wrap; margin-top: 0.9rem; }
+        .p-row > div { min-width: 0; }
+        .p-form .field, .p-form .sel { background: #fff; }
+        .hint-line { font-size: 0.8rem; color: #b45309; font-weight: 700; margin-top: 0.3rem; }
+        .err-line { font-size: 0.85rem; color: #b91c1c; font-weight: 700; margin-top: 0.7rem; padding: 0.45rem 0.65rem; border-radius: 8px; background: #fef2f2; }
+        .ratings { margin-top: 1rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(255px, 1fr)); gap: 0.35rem 1.5rem; }
+        .rate-row { display: flex; align-items: center; justify-content: space-between; gap: 0.6rem; }
+        .rate-row span { font-weight: 700; font-size: 0.9rem; color: var(--navy-900); }
+        .rate { display: inline-flex; gap: 3px; }
+        .rate button { width: 32px; height: 32px; border-radius: 8px; border: 1.5px solid var(--line); background: #fff; font-weight: 800; color: var(--muted); cursor: pointer; font-size: 0.88rem; }
+        .rate button:hover { border-color: var(--line-strong); }
+        .rate button.on.r0 { background: var(--canvas); border-color: var(--line-strong); color: var(--muted); }
+        .rate button.on.r1 { background: #fee2e2; border-color: #fca5a5; color: #b91c1c; }
+        .rate button.on.r2 { background: #ffedd5; border-color: #fdba74; color: #c2410c; }
+        .rate button.on.r3 { background: #e2e8f0; border-color: #94a3b8; color: #334155; }
+        .rate button.on.r4 { background: #dbeafe; border-color: #93c5fd; color: #1d4ed8; }
+        .rate button.on.r5 { background: #dcfce7; border-color: #86efac; color: #15803d; }
+        .p-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; gap: 0.5rem; flex-wrap: wrap; }
+        .sub-title { font-size: 0.74rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-top: 1.1rem; }
+        .empty-note { padding: 2rem 1.3rem; text-align: center; color: var(--muted); }
+
+        /* ---------- Checklist ---------- */
+        .ck-tabs { padding: 0.3rem 1.3rem 0.2rem; display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center; }
+        .ck-hint { color: var(--muted); font-size: 0.84rem; padding: 0.35rem 1.3rem 0; }
+        .task { border: 1px solid var(--line); border-radius: 14px; padding: 0.7rem; margin-bottom: 0.75rem; background: #fff; }
+        .task-head, .step { display: flex; align-items: flex-start; gap: 0.45rem; }
+        .task-num { width: 26px; height: 26px; border-radius: 8px; background: var(--navy-900); color: var(--gold-hi); display: grid; place-items: center; font-size: 0.78rem; font-weight: 800; flex-shrink: 0; margin-top: 0.45rem; }
+        .task-head .field { font-weight: 800; }
+        .steps { margin: 0.55rem 0 0.1rem 2.2rem; }
+        .step { margin-bottom: 0.4rem; background: #fff; }
+        .step-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--line-strong); margin-top: 1.05rem; flex-shrink: 0; }
+        .handle { cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; padding: 0.55rem 0.3rem; color: var(--muted); display: grid; place-items: center; }
+        .handle:hover { color: var(--navy-900); }
+        .dragging { opacity: 0.8; box-shadow: 0 10px 24px rgba(0, 27, 53, 0.25); position: relative; z-index: 3; }
+        .steps .add-dashed { margin-left: 0; }
+
+        /* ---------- Rules ---------- */
+        .hc-group { border: 1px solid var(--line); border-radius: 16px; margin-bottom: 1rem; overflow: hidden; }
+        .hc-head { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 0.9rem; background: var(--tint); border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+        .hc-num { min-width: 42px; height: 42px; padding: 0 0.5rem; border-radius: 12px; background: var(--navy-900); color: var(--gold-hi); display: grid; place-items: center; font-weight: 800; font-size: 1.2rem; }
+        .hc-head b { color: var(--navy-900); }
+        .hc-head small { display: block; color: var(--muted); font-size: 0.8rem; }
+        .hc-head .push { margin-left: auto; }
+        .rule { position: relative; padding: 0.9rem; border-top: 1px solid var(--line); }
+        .rule:first-of-type { border-top: none; }
+        .rule-line { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr) auto; align-items: center; gap: 0.6rem; margin-bottom: 0.55rem; }
+        .rule-line.two { grid-template-columns: 9.5rem minmax(0, 1fr) minmax(0, 1fr); }
+        .rule-k { font-weight: 800; color: var(--navy-900); font-size: 0.9rem; }
+        .rule-sum { color: var(--muted); font-size: 0.84rem; line-height: 1.4; padding: 0.55rem 0.7rem; background: var(--tint); border-radius: 10px; }
+        .rule-sum b { color: var(--navy-900); }
+        .rule.bad .rule-sum { background: #fef2f2; color: #b91c1c; }
+        .hc-add { padding: 0.7rem 0.9rem; border-top: 1px solid var(--line); }
+        .add-hc { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+        .add-hc .sel { width: auto; }
+
+        /* ---------- Save bar ---------- */
+        .savebar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 400; background: #fff; border-top: 1px solid var(--line); box-shadow: 0 -10px 24px -14px rgba(0, 27, 53, 0.45); display: none; }
+        .savebar.on { display: block; }
+        .savebar-inner { max-width: 1100px; margin: 0 auto; padding: 0.75rem 1.5rem; display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+        .save-msg { flex: 1; min-width: 12rem; font-size: 0.9rem; font-weight: 700; color: var(--muted); }
+        .save-msg.dirty { color: #b45309; }
+        .save-msg.err { color: #b91c1c; }
+        .save-msg.ok { color: #15803d; }
+
+        /* ---------- Loading ---------- */
+        .loading { padding: 3rem 1rem; text-align: center; color: var(--muted); }
+        .spinner { border: 4px solid var(--line); width: 44px; height: 44px; border-radius: 50%; border-left-color: var(--gold); animation: spin 0.9s linear infinite; margin: 0 auto 1rem; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ---------- Sign in ---------- */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0, 27, 53, 0.6); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .sheet { background: #fff; border-radius: 22px; width: 94%; max-width: 420px; max-height: 92vh; overflow: auto; box-shadow: 0 30px 70px -20px rgba(0, 0, 0, 0.55); }
+        .sheet-body { padding: 1.6rem 1.5rem 1.5rem; }
+        .signin-art { width: 56px; height: 56px; border-radius: 16px; background: var(--navy-900); color: var(--gold-hi); display: grid; place-items: center; margin: 0 auto 0.9rem; }
+        .signin h3 { text-align: center; font-size: 1.3rem; color: var(--navy-900); }
+        .signin p { text-align: center; color: var(--muted); font-size: 0.9rem; margin: 0.3rem 0 1.2rem; }
+        .signin .lbl { margin-top: 0.9rem; }
+        .pin-field { text-align: center; letter-spacing: 0.5em; font-size: 1.3rem; font-weight: 800; }
+        .pin-keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.55rem; margin-top: 1rem; }
+        .pin-keypad button { padding: 0.85rem; font-size: 1.35rem; font-weight: 800; background: var(--navy-900); color: #fff; border: none; border-radius: 12px; cursor: pointer; }
+        .pin-keypad button:hover { background: var(--navy-700); }
+        .pin-keypad button:disabled { opacity: 0.5; cursor: default; }
+        .pin-keypad button.muted { background: var(--canvas); color: var(--navy-900); font-size: 0.95rem; }
+        .signin-err { margin-top: 0.9rem; padding: 0.55rem 0.75rem; border-radius: 10px; background: #fef2f2; color: #b91c1c; font-size: 0.88rem; font-weight: 700; }
+        .signin-err:empty { display: none; }
+        .signin .btn-primary { margin-top: 1.1rem; }
 
         /* ---------- Toast ---------- */
-        #statusMessageBar {
-            position: fixed; left: 50%; bottom: 1.25rem; transform: translate(-50%, 140%); z-index: 3000;
-            background: var(--navy-950); color: #fff; padding: 0.75rem 1.15rem; border-radius: 14px; font-weight: 700; font-size: 0.92rem;
+        #toast {
+            position: fixed; left: 50%; top: 4.4rem; transform: translate(-50%, -16px); z-index: 3000;
+            background: var(--navy-950); color: #fff; padding: 0.7rem 1.1rem; border-radius: 14px; font-weight: 700; font-size: 0.92rem;
             box-shadow: 0 14px 30px -10px rgba(0, 0, 0, 0.5); max-width: min(92vw, 560px); text-align: center;
-            opacity: 0; visibility: hidden; pointer-events: none;
-            transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.2), opacity 0.2s, visibility 0.3s;
+            opacity: 0; visibility: hidden; pointer-events: none; transition: transform 0.25s, opacity 0.2s, visibility 0.25s;
         }
-        #statusMessageBar.show { transform: translate(-50%, 0); opacity: 1; visibility: visible; }
-        #statusMessageBar.success { background: #065f46; }
-        #statusMessageBar.error { background: #b91c1c; }
+        #toast.show { transform: translate(-50%, 0); opacity: 1; visibility: visible; }
+        #toast.success { background: #065f46; }
+        #toast.error { background: #b91c1c; }
 
-        @media (max-width: 720px) {
-            .appbar-inner { padding: 0.55rem 0.9rem; }
-            .bar-add span { display: none; }
-            .bar-add { padding: 0.55rem 0.65rem; }
-            .hero { padding: 1.3rem 1rem 0; }
-            .hero h1 { font-size: 1.6rem; }
-            .hint .desk { display: none; }
-            .modal-overlay { align-items: flex-end; }
-            .sheet { width: 100%; max-width: none; border-radius: 22px 22px 0 0; max-height: 92vh; }
-            .icon-grid { grid-template-columns: repeat(7, 1fr); gap: 0.3rem; }
+        @media (max-width: 820px) {
+            .home-grid { grid-template-columns: 1fr; }
         }
-        @media (min-width: 721px) { .hint .touch { display: none; } }
-        @media (prefers-reduced-motion: reduce) {
-            .pc-inner, .pcard.fresh .pc-inner { animation: none; transition: none; }
+        @media (max-width: 640px) {
+            .appbar-inner { padding: 0.55rem 0.9rem; }
+            .who span { display: none; }
+            .hero { padding: 1.2rem 1rem 4.2rem; }
+            .hero h1 { font-size: 1.55rem; }
+            .workspace { padding: 0 0.75rem 2rem; }
+            .card-head, .toolbar, .ck-tabs, .ck-hint { padding-left: 1rem; padding-right: 1rem; }
+            .card-body { padding: 0.8rem 1rem 1.1rem; }
+            .p-head { padding: 0.7rem 1rem; }
+            .p-form { padding: 0.4rem 1rem 1.1rem; }
+            .p-grid { grid-template-columns: 1fr; }
+            .ratings { grid-template-columns: 1fr; }
+            .steps { margin-left: 0.6rem; }
+            .rule-line, .rule-line.two { grid-template-columns: 1fr; gap: 0.35rem; }
+            .rule-line .icon-x { position: absolute; top: 0.6rem; right: 0.6rem; }
+            .rule-line > span:empty { display: none; }
+            .savebar-inner { padding: 0.65rem 0.9rem; }
+            .save-msg { flex-basis: 100%; }
+            .savebar-inner .btn-primary { flex: 1; }
         }
     </style>
 </head>
 <body>
 
-<div id="statusMessageBar"></div>
+<div id="toast"></div>
 
 <header class="appbar">
     <div class="appbar-inner">
-        <div class="brand">
-            <span class="brand-mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2"/><rect x="13.5" y="13.5" width="7" height="7" rx="2" fill="currentColor"/></svg></span>
-            <div class="brand-name">Projects<small>Launcher</small></div>
-        </div>
+        <a class="brand" href="./" title="Back to projects">
+            <span class="brand-mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9.5h18M3 15h18M9.5 4v16"/></svg></span>
+            <div class="brand-name">Sheets<small>Editor</small></div>
+        </a>
         <div class="appbar-actions">
-            <button type="button" class="icon-btn" onclick="openManage()" title="Manage projects" aria-label="Manage projects"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1.3" fill="currentColor" stroke="none"/><circle cx="4.5" cy="12" r="1.3" fill="currentColor" stroke="none"/><circle cx="4.5" cy="18" r="1.3" fill="currentColor" stroke="none"/></svg></button>
-            <button type="button" class="bar-add" onclick="openEditor(null)" aria-label="Add project"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span>Add Project</span></button>
+            <div class="who" id="who"></div>
+            <a class="icon-btn" href="./" title="All projects" aria-label="All projects"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2"/><rect x="13.5" y="13.5" width="7" height="7" rx="2"/></svg></a>
+            <button type="button" class="icon-btn" id="signOutBtn" style="display:none" onclick="signOut()" title="Sign out" aria-label="Sign out"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3"/><path d="M10 17l-5-5 5-5M5 12h11"/></svg></button>
         </div>
     </div>
 </header>
 
 <section class="hero">
-    <div class="eyebrow" id="heroEyebrow">&nbsp;</div>
-    <h1 id="heroTitle">&nbsp;</h1>
-    <p class="hero-sub" id="heroSub"></p>
+    <div class="hero-inner">
+        <button type="button" class="back-btn" id="backBtn" onclick="history.back()" aria-label="Back"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <div>
+            <div class="eyebrow" id="heroEyebrow">Sheets Editor</div>
+            <h1 id="heroTitle">Your project sheets</h1>
+            <p class="hero-sub" id="heroSub">Staff, checklists and headcount rules, all in one place</p>
+        </div>
+    </div>
 </section>
 
-<main>
-    <div class="stage" id="stage" tabindex="0" aria-roledescription="carousel" aria-label="Projects">
-        <div class="floor"></div>
-        <div class="ring" id="ring"></div>
-    </div>
-    <div class="controls">
-        <button type="button" class="nav-btn" onclick="step(-1)" aria-label="Previous"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
-        <div class="dots" id="dots"></div>
-        <button type="button" class="nav-btn" onclick="step(1)" aria-label="Next"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
-    </div>
-    <p class="hint">
-        <span class="touch">Swipe to spin · tap the front card to open</span>
-        <span class="desk">Drag, scroll or use <kbd>&larr;</kbd> <kbd>&rarr;</kbd> to spin · <kbd>Enter</kbd> or click the front card to open</span>
-    </p>
-    <div class="sr-only" aria-live="polite" id="liveRegion"></div>
-</main>
+<main class="workspace" id="panel"></main>
 
-<!-- Add / edit a project -->
-<div class="modal-overlay" id="editModal" onclick="if(event.target===this) closeModal('editModal')">
-    <div class="sheet">
-        <div class="sheet-head">
-            <h3 id="edTitle">Add Project</h3>
-            <button type="button" class="sheet-close" onclick="closeModal('editModal')" aria-label="Close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
-        </div>
-        <div class="sheet-body">
-            <div class="preview" id="edPreview"></div>
-            <label class="lbl" for="fName">Name</label>
-            <input type="text" class="field" id="fName" maxlength="40" placeholder="e.g. Pokémon Tracker" autocomplete="off" oninput="renderPreview()">
-            <label class="lbl" for="fUrl">Link</label>
-            <input type="url" class="field" id="fUrl" placeholder="spirttomb.github.io/My-Project/" inputmode="url" autocomplete="off" autocapitalize="off" spellcheck="false" oninput="renderPreview()">
-            <label class="lbl" for="fDesc">Description <span>(optional)</span></label>
-            <input type="text" class="field" id="fDesc" maxlength="90" placeholder="What it's for, in a few words" autocomplete="off">
-            <label class="lbl">Icon</label>
-            <div class="icon-grid" id="fIcons"></div>
-            <label class="lbl">Color</label>
-            <div class="swatches" id="fColors"></div>
-            <div class="form-error" id="fErr"></div>
-            <div class="sheet-actions">
-                <button type="button" class="btn-danger" id="fDelete" onclick="deleteEditing()">Delete</button>
-                <span class="spacer"></span>
-                <button type="button" class="btn-secondary" onclick="closeModal('editModal')">Cancel</button>
-                <button type="button" class="btn-primary" id="fSave" onclick="saveEditor()">Save</button>
-            </div>
-        </div>
+<div class="savebar" id="saveBar">
+    <div class="savebar-inner">
+        <div class="save-msg" id="saveMsg"></div>
+        <button type="button" class="btn-secondary" id="discardBtn" onclick="discardChanges()">Discard</button>
+        <button type="button" class="btn-primary" id="saveBtn" onclick="saveCurrent()">Save changes</button>
     </div>
 </div>
 
-<!-- Manage projects -->
-<div class="modal-overlay" id="manageModal" onclick="if(event.target===this) closeModal('manageModal')">
+<!-- Sign in -->
+<div class="modal-overlay" id="signinModal">
     <div class="sheet">
-        <div class="sheet-head">
-            <h3>Manage Projects</h3>
-            <button type="button" class="sheet-close" onclick="closeModal('manageModal')" aria-label="Close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+        <div class="sheet-body signin">
+            <div class="signin-art"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+            <h3>Owner sign-in</h3>
+            <p>Enter your PIN to open the Sheets Editor.</p>
+            <input type="password" class="field pin-field" id="siPin" inputmode="numeric" autocomplete="off" maxlength="4" placeholder="••••" aria-label="PIN"
+                oninput="this.value=this.value.replace(/\D/g,''); if (this.value.length === 4) signIn()">
+            <div class="pin-keypad" id="siPad">
+                <button type="button" onclick="padKey('1')">1</button>
+                <button type="button" onclick="padKey('2')">2</button>
+                <button type="button" onclick="padKey('3')">3</button>
+                <button type="button" onclick="padKey('4')">4</button>
+                <button type="button" onclick="padKey('5')">5</button>
+                <button type="button" onclick="padKey('6')">6</button>
+                <button type="button" onclick="padKey('7')">7</button>
+                <button type="button" onclick="padKey('8')">8</button>
+                <button type="button" onclick="padKey('9')">9</button>
+                <button type="button" class="muted" onclick="$('siPin').value=''">Clear</button>
+                <button type="button" onclick="padKey('0')">0</button>
+                <button type="button" class="muted" onclick="$('siPin').value=$('siPin').value.slice(0,-1)" aria-label="Delete">&#9003;</button>
+            </div>
+            <div class="signin-err" id="siErr"></div>
         </div>
-        <div class="sheet-body" id="manageBody"></div>
     </div>
 </div>
 
@@ -423,486 +374,1124 @@
 // =====================================================================
 // CONFIG
 // =====================================================================
-const ICONS = {
-    checklist: '<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V2.8h6V4"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/>',
-    cash: '<rect x="2.5" y="6" width="19" height="12" rx="2"/><circle cx="12" cy="12" r="2.6"/><path d="M6 9.5v5M18 9.5v5"/>',
-    lineup: '<circle cx="4.5" cy="12" r="2"/><path d="M6.5 12H10M10 6v12M10 6h4M10 12h4M10 18h4"/><circle cx="17" cy="6" r="2"/><circle cx="17" cy="12" r="2"/><circle cx="17" cy="18" r="2"/>',
-    users: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18.5 14.5A6.5 6.5 0 0 1 21.5 20"/>',
-    calendar: '<rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
-    chart: '<path d="M4 20V11M10 20V5M16 20v-6M2 20h20"/>',
-    clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
-    box: '<path d="M3 8l9-5 9 5v8l-9 5-9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/>',
-    cup: '<path d="M6 8h12l-1.4 12.2a2 2 0 0 1-2 1.8H9.4a2 2 0 0 1-2-1.8z"/><path d="M5 8h14M14 8l2-5"/><circle cx="11" cy="14" r="2"/>',
-    broom: '<path d="M14 4l6 6M17 7l-6.5 6.5"/><path d="M10.5 13.5L4 20c2 1 6.5 1 9-2.5l-2.5-4z"/>',
-    star: '<path d="M12 3l2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.8l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z"/>',
-    game: '<rect x="2.5" y="7" width="19" height="11" rx="5"/><path d="M7 10.5v4M5 12.5h4"/><circle cx="15.5" cy="11.5" r="1" fill="currentColor"/><circle cx="18" cy="14" r="1" fill="currentColor"/>',
-    globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>',
-    link: '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>'
-};
-const ICON_NAMES = {
-    checklist: "Checklist", cash: "Money", lineup: "Lineup", users: "People", calendar: "Calendar", chart: "Chart", clock: "Clock",
-    box: "Box", cup: "Drink", broom: "Cleaning", star: "Star", game: "Game", globe: "Website", link: "Link"
-};
-const COLORS = [
-    { c: "#f59e0b", ink: "#001b35", name: "Gold" },
-    { c: "#ef4444", ink: "#ffffff", name: "Red" },
-    { c: "#16a34a", ink: "#ffffff", name: "Green" },
-    { c: "#3b82f6", ink: "#ffffff", name: "Blue" },
-    { c: "#8b5cf6", ink: "#ffffff", name: "Purple" },
-    { c: "#0d9488", ink: "#ffffff", name: "Teal" },
-    { c: "#db2777", ink: "#ffffff", name: "Pink" },
-    { c: "#c2410c", ink: "#ffffff", name: "Orange" }
+// The Apps Script web app (sheets-editor-script.gs). Same URL as the old checklist editor.
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby0sPMkW3Q145qzE1hg4uToIJ4cwNsF7Iu3YcIK2ZbfZYs0g-jlGNFyObLzSRF39MPehw/exec";
+
+const STAFF_SHEET_ID = "1Y1alfXEMbRiIWTbllZTQ4_K4-O5bhTnOiRn8DxN5QqY";
+const RULES_SHEET_ID = "1VqaVtG8IV_wVhVxDZNM68G-Q-JFhYvFx55oB3L1koM4";
+
+const CHECKLISTS = [
+    { id: "close-930", title: "9:30 Close", zones: {
+        "Front Counter":     "1Cn_uzQ5pSE05Z-ZQNiTxYE9kAhKMU72lN4Ev7as_eDU",
+        "Dining Room":       "1C11a1veW6dxVEZ26IABx7d0fSDmIfcnan1q4iiWhW4c",
+        "Bathrooms":         "1xlYAGHjbucEqjm2dR39VU-SE-IMiofa-RY5lPitWNSQ",
+        "Break Room & Tech": "1ni177H0ZmNCjrQA1wuKQdz3Rx77EJWmaPvwjIh2x6eo",
+        "Floors":            "1y-rF7moo-sv_NAPtkCfDSWqka95utq8EpaUMCWMRrt4"
+    } },
+    { id: "close-1030", title: "10:30 Close", zones: {
+        "Desserts": "1Ce84B2K4CvkUwdCaBBVD072feX2r__17QtIvmxOPVuY",
+        "Drinks":   "1hvFBJ94JTBBsQzSWQyEWHrAozfh0dLdG5RtKKgtvVns",
+        "Chutes":   "1j37JbCgwM_5ZKxDm9R2uPeUTkyYUsDLPWgHXY8DPxMw",
+        "Stocking": "1P5tIH7dBhbQHzV47b91xBDXNVyDI0eMpfLTOJjOFlMI",
+        "Trash":    "1UzI9d3VyGQPrGjM66ZKmguSJ5PYhRNTVnjfzCytxsm0",
+        "Floors":   "1twif2-sM0LOD-UuiJvNYsJaHyVnpPLUkVP5scARg6HA"
+    } },
+    { id: "opening", title: "Opening", zones: {
+        "Drive-Thru":  "1B1YpNYMgcAueDhEDf535P_oyWORwCU_nVArbyPZTT3Q",
+        "Dining Room": "1ypeXhpHAeyGg71Lv3OLCkUtsii41Ref_q9foZlki6UU"
+    } },
+    { id: "leader", title: "Leader", zones: {
+        "Opening":  "17-Vv3Cx1V3jOTGNRVxw76b0CoHTLi0B49DOhNjLiKS0",
+        "Handover": "1rvhXsDC7fINI6MvbGy4lD_ujxwKJOPblg_a35sD6310",
+        "Closing":  "1D-vYs8RzmUQ_FKRJO0VfhSTX-DrwvE-X3q8ZxAEa1xU"
+    } }
 ];
-const DEFAULTS = [
-    { id: "checklist", name: "Checklist Tracker", url: "https://spirttomb.github.io/Checklist-Tracker/", desc: "Shift checklists, leader verification and end-of-day logs", icon: "checklist", color: "#f59e0b" },
-    { id: "changefund", name: "Change Fund Portal", url: "https://spirttomb.github.io/change-fund-portal/", desc: "Count the change fund and log deposits and received", icon: "cash", color: "#16a34a" },
-    { id: "lineup", name: "Lineup Generator", url: "https://spirttomb.github.io/Lineup-Generator/", desc: "Build the shift lineup with breaks, tasks and closing", icon: "lineup", color: "#3b82f6" }
-];
-const STORE_KEY = "projectLauncher:v1";
+// Areas that offer a preclose (from the Checklist Tracker)
+const PRECLOSE_ZONES = { "close-930": ["Dining Room", "Front Counter"], "close-1030": ["Desserts", "Drinks", "Chutes"] };
+// Headcount rule periods (from the Checklist Tracker)
+const PERIODS = { "930": { label: "9:30 Close", shift: "close-930", min: 1, max: 12 }, "1030": { label: "10:30 Close", shift: "close-1030", min: 1, max: 12 } };
+
+// Position ratings (same names and column order the Lineup Generator reads)
+const SKILLS = ["Register", "Bagging", "Drinks", "Window", "Desserts", "Dining Room", "Runner", "Cash", "iPOS"];
+const SKILL_ALIASES = {
+    register: "Register", registers: "Register", reg: "Register", fc: "Register",
+    bag: "Bagging", bags: "Bagging", bagging: "Bagging", bagger: "Bagging", baggers: "Bagging",
+    drink: "Drinks", drinks: "Drinks", bev: "Drinks", beverages: "Drinks",
+    window: "Window", windows: "Window",
+    dessert: "Desserts", desserts: "Desserts",
+    diningroom: "Dining Room", dining: "Dining Room", dr: "Dining Room", lobby: "Dining Room",
+    runner: "Runner", running: "Runner", runners: "Runner",
+    cash: "Cash", ipos: "iPOS", ipad: "iPOS", outside: "iPOS"
+};
 
 // =====================================================================
 // HELPERS
 // =====================================================================
 const $ = id => document.getElementById(id);
 function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
-function mod(n, m) { return ((n % m) + m) % m; }
-function icon(name) { return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[name] || ICONS.link}</svg>`; }
-function colorOf(c) { return COLORS.find(x => x.c === c) || COLORS[0]; }
-function tint(hex, a) { const n = parseInt(hex.slice(1), 16); return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${a})`; }
-function accentVars(c) { const col = colorOf(c); return `--accent:${col.c};--accent-ink:${col.ink};--accent-soft:${tint(col.c, 0.45)}`; }
-function hostPath(url) { try { const u = new URL(url); return (u.hostname + u.pathname).replace(/\/$/, ""); } catch (e) { return url; } }
-function newId() { return "p" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
-function normUrl(raw) {
-    let u = String(raw || "").trim();
-    if (!u) return null;
-    if (!/^[a-z][a-z0-9+.-]*:\/\//i.test(u)) u = "https://" + u.replace(/^\/+/, "");
+let uidN = 0;
+function newUid() { return "u" + (++uidN); }
+function initials(name) {
+    const w = String(name || "").trim().split(/\s+/).filter(Boolean);
+    if (!w.length) return "?";
+    return ((w[0][0] || "") + (w.length > 1 ? w[w.length - 1][0] : (w[0][1] || ""))).toUpperCase();
+}
+function colLetter(i) { let s = ""; i++; while (i > 0) { const m = (i - 1) % 26; s = String.fromCharCode(65 + m) + s; i = Math.floor((i - 1) / 26); } return s; }
+function toast(msg, type = "info", ms = 3000) {
+    const t = $("toast");
+    t.innerText = msg;
+    t.className = type;
+    void t.offsetWidth;
+    t.classList.add("show");
+    clearTimeout(window.toastT);
+    window.toastT = setTimeout(() => t.classList.remove("show"), ms);
+}
+function autosize(el) { el.style.height = "auto"; el.style.height = (el.scrollHeight + 2) + "px"; }
+
+const IC = {
+    users: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18.5 14.5A6.5 6.5 0 0 1 21.5 20"/></svg>',
+    check: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V2.8h6V4"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg>',
+    rules: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h10M4 12h7M4 18h10"/><path d="M17 4v16M14 17l3 3 3-3"/></svg>',
+    chevR: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>',
+    chevD: '<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>',
+    search: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg>',
+    plus: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+    x: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+    grip: '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.6"/><circle cx="15" cy="6" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="18" r="1.6"/><circle cx="15" cy="18" r="1.6"/></svg>',
+    eye: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
+    sort: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h9M4 12h6M4 18h3"/><path d="M17 4v16M14 17l3 3 3-3"/></svg>'
+};
+
+// =====================================================================
+// API (Apps Script)
+// =====================================================================
+let auth = { pin: "", name: "" };
+
+class ApiError extends Error { constructor(msg, code) { super(msg); this.code = code || ""; } }
+
+async function api(action, body = {}) {
+    const ctrl = new AbortController();
+    const tm = setTimeout(() => ctrl.abort(), 45000);
+    let res;
     try {
-        const x = new URL(u);
-        if (!/^https?:$/.test(x.protocol)) return null;
-        if (!x.hostname.includes(".") && x.hostname !== "localhost") return null;
-        return x.href;
-    } catch (e) { return null; }
+        res = await fetch(SCRIPT_URL, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify({ action, pin: auth.pin, ...body }),
+            signal: ctrl.signal
+        });
+    } catch (e) {
+        throw new ApiError(e.name === "AbortError" ? "Google took too long to answer. Try again." : "Couldn't reach the editor script. Check your connection.", "network");
+    } finally { clearTimeout(tm); }
+    let j;
+    try { j = await res.json(); } catch (e) { throw new ApiError("The editor script sent back something unexpected. Make sure the new script is deployed.", "bad"); }
+    if (!j.ok) {
+        if (j.error === "Unknown action.") throw new ApiError("The editor script is still the old version. Paste in sheets-editor-script.gs and deploy a new version.", "old");
+        throw new ApiError(j.error || "The script refused.", j.code);
+    }
+    return j;
 }
-function showStatusMessage(message, type = "info", duration = 3000) {
-    const bar = $("statusMessageBar");
-    bar.innerText = message;
-    bar.className = type;
-    void bar.offsetWidth;
-    bar.classList.add("show");
-    clearTimeout(window.statusTimeout);
-    window.statusTimeout = setTimeout(() => bar.classList.remove("show"), duration);
-}
-const ICON_OPEN = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>';
-const ICON_PEN = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg>';
-const ICON_CHECK = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
 
 // =====================================================================
-// STORAGE (on this device)
+// SIGN IN
 // =====================================================================
-function loadStore() {
+let signingIn = false;
+
+function showSignIn(err) {
+    $("siErr").textContent = err || "";
+    $("siPin").value = "";
+    $("signinModal").classList.add("active");
+    setTimeout(() => $("siPin").focus(), 60);
+}
+function padKey(d) {
+    const i = $("siPin");
+    if (signingIn || i.value.length >= 4) return;
+    i.value += d;
+    if (i.value.length === 4) signIn();
+}
+async function signIn() {
+    const pin = $("siPin").value.trim();
+    if (signingIn || !pin) return;
+    signingIn = true;
+    document.querySelectorAll("#siPad button").forEach(b => b.disabled = true);
+    $("siErr").textContent = "Checking...";
+    auth = { pin, name: "" };
     try {
-        const s = JSON.parse(localStorage.getItem(STORE_KEY));
-        if (s && Array.isArray(s.projects)) return { projects: s.projects, newTab: !!s.newTab, last: s.last || null };
-    } catch (e) {}
-    return { projects: DEFAULTS.map(p => ({ ...p })), newTab: false, last: null };
+        const j = await api("login");
+        auth.name = j.name;
+        try { sessionStorage.setItem("sheetsEditorPin", pin); } catch (e) {}
+        $("signinModal").classList.remove("active");
+        $("siErr").textContent = "";
+        showWho();
+        route();
+    } catch (e) {
+        auth = { pin: "", name: "" };
+        $("siErr").textContent = e.message;
+        $("siPin").value = "";
+    } finally {
+        signingIn = false;
+        document.querySelectorAll("#siPad button").forEach(b => b.disabled = false);
+    }
 }
-function saveStore() { try { localStorage.setItem(STORE_KEY, JSON.stringify(store)); } catch (e) {} }
-let store = loadStore();
+$("siPin").addEventListener("keydown", e => { if (e.key === "Enter") signIn(); });
+
+function showWho() {
+    const w = $("who");
+    w.innerHTML = `<span class="chip-avatar">${esc(initials(auth.name))}</span><span>${esc(auth.name)}</span>`;
+    w.classList.add("on");
+    $("signOutBtn").style.display = "";
+}
+function signOut() {
+    if (cur && isDirty() && !confirm("You have unsaved changes. Sign out anyway?")) return;
+    try { sessionStorage.removeItem("sheetsEditorPin"); } catch (e) {}
+    auth = { pin: "", name: "" };
+    cur = null;
+    $("who").classList.remove("on");
+    $("signOutBtn").style.display = "none";
+    $("panel").innerHTML = "";
+    setSaveBar(false);
+    showSignIn();
+}
 
 // =====================================================================
-// CAROUSEL
+// NAVIGATION (hash routes so the phone's back button works)
+//   #           home
+//   #staff
+//   #rules
+//   #check/<shiftId>/<zone>
 // =====================================================================
-const stage = $("stage"), ring = $("ring");
-const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-let items = [], cards = [];
-let pos = 0, target = 0, raf = null, dragging = false, drag = null;
-let CW = 280, CH = 364, R = 390, STEP = 34;
-let lastFront = -1, freshId = null;
+let cur = null;          // { view, sheetId, model, baseline, version, saving, stale }
+let lastHash = location.hash;
+let ignoreHash = false;
 
-function sizes() {
-    const vw = window.innerWidth, vh = window.innerHeight;
-    CW = Math.round(Math.min(300, Math.max(220, vw * 0.64)));
-    CH = Math.round(CW * 1.3);
-    if (vh < 760) CH = Math.max(300, Math.min(CH, vh - 330));
-    R = CW * 1.85;
-    document.documentElement.style.setProperty("--cw", CW + "px");
-    document.documentElement.style.setProperty("--ch", CH + "px");
-}
+function go(hash) { location.hash = hash; }
 
-function cardHtml(p, i) {
-    return `<div class="pcard${p.id === freshId ? " fresh" : ""}" data-i="${i}" style="${accentVars(p.color)}">
-        <div class="pc-inner">
-            <div class="pc-top">
-                <span class="pc-mark">${icon(p.icon)}</span>
-                <div class="pc-row"><span class="pc-tile">${icon(p.icon)}</span><span class="pc-num">${String(i + 1).padStart(2, "0")}</span></div>
-                <span class="pc-host">${esc(hostPath(p.url))}</span>
-            </div>
-            <div class="pc-body"><h3>${esc(p.name)}</h3>${p.desc ? `<p>${esc(p.desc)}</p>` : ""}</div>
-            <div class="pc-foot">
-                <button type="button" class="pc-open" data-act="open" tabindex="-1">${ICON_OPEN} Open</button>
-                <button type="button" class="pc-edit" data-act="edit" tabindex="-1" aria-label="Edit ${esc(p.name)}">${ICON_PEN}</button>
-            </div>
-        </div>
-    </div>`;
-}
-function addCardHtml(i) {
-    return `<div class="pcard add" data-i="${i}">
-        <div class="pc-inner">
-            <span class="add-circle"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
-            <div class="add-title">Add a project</div>
-            <div class="add-sub">Any link: a GitHub page, a sheet, a form</div>
-            <button type="button" class="sr-only" data-act="open" tabindex="-1">Add a project</button>
-        </div>
-    </div>`;
-}
-
-function renderRing() {
-    items = store.projects.map(p => ({ p })).concat([{ add: true }]);
-    ring.innerHTML = items.map((it, i) => it.add ? addCardHtml(i) : cardHtml(it.p, i)).join("");
-    cards = Array.from(ring.children);
-    $("dots").innerHTML = items.map((it, i) =>
-        `<button type="button" class="dot${it.add ? " plus" : ""}" data-i="${i}" aria-label="${it.add ? "Add a project" : esc(it.p.name)}"></button>`).join("");
-    if (freshId) {
-        const f = freshId;
-        setTimeout(() => { if (freshId === f) freshId = null; cards.forEach(c => c.classList.remove("fresh")); }, 950);
-    }
-    lastFront = -1;
-    updateHero();
-}
-
-function rebuild(frontIndex) {
-    renderRing();
-    pos = target = mod(frontIndex, items.length);
-    layout();
-}
-
-function frontIndex() { return mod(Math.round(target), items.length); }
-
-function layout() {
-    const N = cards.length;
-    if (!N) return;
-    const fi = mod(Math.round(pos), N);
-    cards.forEach((el, i) => {
-        let d = mod(i - pos, N);
-        if (d >= N / 2) d -= N;
-        if (N === 1) d = 0;
-        const ad = Math.abs(d);
-        let vis = Math.min(1, (3.1 - ad) * 1.6);
-        if (N <= 6 && N > 1) vis = Math.min(vis, (N / 2 - ad) * 3);
-        vis = Math.max(0, vis);
-        el.style.transform = `translateZ(${-R}px) rotateY(${(d * STEP).toFixed(3)}deg) translateZ(${R}px)`;
-        el.style.opacity = vis.toFixed(3);
-        el.style.zIndex = String(1000 - Math.round(ad * 100));
-        el.style.pointerEvents = vis > 0.15 ? "auto" : "none";
-        el.style.visibility = vis < 0.01 ? "hidden" : "visible";
-        el.style.setProperty("--dim", (Math.min(1, ad) * 0.42).toFixed(3));
-        el.classList.toggle("front", i === fi && ad < 0.5);
-    });
-    updateFront(frontIndex());
-}
-
-function updateFront(fi) {
-    if (fi === lastFront) return;
-    lastFront = fi;
-    document.querySelectorAll(".dot").forEach((d, i) => d.classList.toggle("on", i === fi));
-    cards.forEach((c, i) => c.querySelectorAll("button").forEach(b => { b.tabIndex = i === fi ? 0 : -1; }));
-    const it = items[fi];
-    $("liveRegion").textContent = it ? (it.add ? "Add a project" : `${it.p.name}, ${fi + 1} of ${store.projects.length}`) : "";
-}
-
-function tick() {
-    raf = null;
-    if (!dragging) {
-        pos += (target - pos) * (reduceMotion ? 0.5 : 0.14);
-        if (Math.abs(target - pos) < 0.001) pos = target;
-    }
-    layout();
-    if (dragging || pos !== target) raf = requestAnimationFrame(tick);
-    else settled();
-}
-function kick() { if (!raf) raf = requestAnimationFrame(tick); }
-function settled() {
-    const it = items[frontIndex()];
-    if (it && it.p && store.last !== it.p.id) { store.last = it.p.id; saveStore(); }
-}
-function step(n) { target = Math.round(target) + n; kick(); }
-function goTo(i) {
-    const N = items.length;
-    let diff = i - frontIndex();
-    if (diff > N / 2) diff -= N;
-    if (diff < -N / 2) diff += N;
-    target = Math.round(target) + diff;
-    kick();
-}
-
-function activate(i) {
-    const it = items[i];
-    if (!it) return;
-    if (it.add) { openEditor(null); return; }
-    launch(it.p, cards[i]);
-}
-function launch(p, card) {
-    if (store.newTab) {
-        const w = window.open(p.url, "_blank", "noopener");
-        if (!w) location.href = p.url;
+window.addEventListener("hashchange", () => {
+    if (ignoreHash) { ignoreHash = false; lastHash = location.hash; return; }
+    if (cur && isDirty() && !confirm("You have unsaved changes. Leave without saving?")) {
+        ignoreHash = true;
+        location.hash = lastHash;
         return;
     }
-    if (card && !reduceMotion) {
-        card.classList.add("launching");
-        setTimeout(() => { location.href = p.url; }, 260);
-    } else location.href = p.url;
-}
-window.addEventListener("pageshow", () => cards.forEach(c => c.classList.remove("launching")));
-
-function handleTap(card, act) {
-    if (!card) return;
-    const i = +card.dataset.i;
-    const settledEnough = Math.abs(target - pos) < 0.3;
-    if (i === frontIndex() && settledEnough) {
-        if (act && act.dataset.act === "edit" && items[i].p) openEditor(items[i].p.id);
-        else activate(i);
-    } else goTo(i);
-}
-
-// Drag / swipe
-stage.addEventListener("pointerdown", e => {
-    if (e.button !== 0) return;
-    drag = { x: e.clientX, y: e.clientY, start: pos, lastX: e.clientX, lastT: performance.now(), v: 0, moved: false,
-        card: e.target.closest(".pcard"), act: e.target.closest("[data-act]"), id: e.pointerId };
+    lastHash = location.hash;
+    route();
 });
-stage.addEventListener("pointermove", e => {
-    if (!drag || e.pointerId !== drag.id) return;
-    const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
-    if (!drag.moved) {
-        if (Math.abs(dx) > 8 && Math.abs(dx) > Math.abs(dy)) {
-            drag.moved = true;
-            dragging = true;
-            drag.start = pos;
-            drag.x = e.clientX;
-            try { stage.setPointerCapture(drag.id); } catch (err) {}
-            stage.classList.add("dragging");
-        } else if (Math.abs(dy) > 12) { drag = null; return; }
-        else return;
+window.addEventListener("beforeunload", e => { if (cur && isDirty()) { e.preventDefault(); e.returnValue = ""; } });
+
+function setHero(eyebrow, title, sub, back) {
+    $("heroEyebrow").textContent = eyebrow;
+    $("heroTitle").textContent = title;
+    $("heroSub").textContent = sub;
+    $("backBtn").classList.toggle("on", !!back);
+}
+
+function route() {
+    if (!auth.name) return;
+    const h = decodeURIComponent(location.hash.replace(/^#/, ""));
+    const parts = h.split("/");
+    if (parts[0] === "staff") return openSheet("staff", STAFF_SHEET_ID);
+    if (parts[0] === "rules") return openSheet("rules", RULES_SHEET_ID);
+    if (parts[0] === "check") {
+        const shift = CHECKLISTS.find(c => c.id === parts[1]);
+        const zone = parts.slice(2).join("/");
+        if (shift && shift.zones[zone]) return openSheet("checklist", shift.zones[zone], { shift, zone });
     }
-    const px = CW * 0.85;
-    pos = drag.start - (e.clientX - drag.x) / px;
-    target = pos;
-    const now = performance.now(), dt = now - drag.lastT;
-    if (dt > 0) drag.v = 0.75 * drag.v + 0.25 * ((e.clientX - drag.lastX) / dt);
-    drag.lastX = e.clientX;
-    drag.lastT = now;
-    kick();
-});
-function endDrag(e, cancelled) {
-    if (!drag || (e && e.pointerId !== drag.id)) return;
-    const d = drag;
-    drag = null;
-    if (d.moved) {
-        dragging = false;
-        stage.classList.remove("dragging");
-        const fling = Math.max(-4, Math.min(4, -d.v * 220 / (CW * 0.85)));
-        target = Math.round(pos + fling);
-        kick();
-    } else if (!cancelled) handleTap(d.card, d.act);
-}
-stage.addEventListener("pointerup", e => endDrag(e, false));
-stage.addEventListener("pointercancel", e => endDrag(e, true));
-// Keyboard "clicks" on the front card's buttons (mouse/touch go through pointerup)
-ring.addEventListener("click", e => {
-    if (e.detail !== 0) return;
-    handleTap(e.target.closest(".pcard"), e.target.closest("[data-act]"));
-});
-$("dots").addEventListener("click", e => { const d = e.target.closest(".dot"); if (d) goTo(+d.dataset.i); });
-
-// Mouse wheel / trackpad
-let wheelAcc = 0, wheelLock = 0;
-stage.addEventListener("wheel", e => {
-    const d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
-    e.preventDefault();
-    const now = performance.now();
-    if (now < wheelLock) return;
-    wheelAcc += d;
-    if (Math.abs(wheelAcc) > 40) { step(wheelAcc > 0 ? 1 : -1); wheelAcc = 0; wheelLock = now + 240; }
-}, { passive: false });
-
-// Keyboard
-document.addEventListener("keydown", e => {
-    const open = document.querySelector(".modal-overlay.active");
-    if (open) {
-        if (e.key === "Escape") closeModal(open.id);
-        if (e.key === "Enter" && open.id === "editModal" && e.target.tagName === "INPUT") { e.preventDefault(); saveEditor(); }
-        return;
-    }
-    const tag = (document.activeElement && document.activeElement.tagName) || "";
-    if (tag === "INPUT" || tag === "TEXTAREA") return;
-    if (e.key === "ArrowLeft") { e.preventDefault(); step(-1); }
-    else if (e.key === "ArrowRight") { e.preventDefault(); step(1); }
-    else if ((e.key === "Enter" || e.key === " ") && tag !== "BUTTON") { e.preventDefault(); activate(frontIndex()); }
-});
-
-window.addEventListener("resize", () => { sizes(); layout(); });
-
-// =====================================================================
-// HERO
-// =====================================================================
-function updateHero() {
-    const d = new Date(), h = d.getHours();
-    $("heroEyebrow").textContent = d.toLocaleDateString(undefined, { weekday: "long", month: "short", day: "numeric" });
-    $("heroTitle").textContent = h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening";
-    const n = store.projects.length;
-    $("heroSub").textContent = n ? `${n} project${n === 1 ? "" : "s"} · pick one to open` : "No projects yet · add your first one";
+    renderHome();
 }
 
 // =====================================================================
-// MODALS
+// HOME
 // =====================================================================
-function openModal(id) { $(id).classList.add("active"); }
-function closeModal(id) {
-    $(id).classList.remove("active");
-    if (!document.querySelector(".modal-overlay.active")) stage.focus({ preventScroll: true });
-}
-
-// ---------- Add / edit ----------
-let ed = null;
-function pickColor() {
-    const used = new Set(store.projects.map(p => p.color));
-    return (COLORS.find(c => !used.has(c.c)) || COLORS[store.projects.length % COLORS.length]).c;
-}
-function openEditor(id) {
-    const p = id ? store.projects.find(x => x.id === id) : null;
-    ed = { id: p ? p.id : null, icon: p ? p.icon : "link", color: p ? p.color : pickColor() };
-    $("edTitle").textContent = p ? "Edit Project" : "Add Project";
-    $("fName").value = p ? p.name : "";
-    $("fUrl").value = p ? p.url : "";
-    $("fDesc").value = p ? (p.desc || "") : "";
-    $("fDelete").style.display = p ? "" : "none";
-    $("fSave").textContent = p ? "Save" : "Add Project";
-    $("fErr").textContent = "";
-    renderPickers();
-    renderPreview();
-    openModal("editModal");
-    if (!p && window.matchMedia("(hover: hover)").matches) setTimeout(() => $("fName").focus(), 80);
-}
-function renderPickers() {
-    $("fIcons").innerHTML = Object.keys(ICONS).map(k =>
-        `<button type="button" class="ico${k === ed.icon ? " on" : ""}" data-icon="${k}" title="${ICON_NAMES[k]}" aria-label="${ICON_NAMES[k]} icon">${icon(k)}</button>`).join("");
-    $("fColors").innerHTML = COLORS.map(c =>
-        `<button type="button" class="sw${c.c === ed.color ? " on" : ""}" data-color="${c.c}" style="background:${c.c}" aria-label="${c.name}">${ICON_CHECK}</button>`).join("");
-}
-$("fIcons").addEventListener("click", e => { const b = e.target.closest(".ico"); if (!b) return; ed.icon = b.dataset.icon; renderPickers(); renderPreview(); });
-$("fColors").addEventListener("click", e => { const b = e.target.closest(".sw"); if (!b) return; ed.color = b.dataset.color; renderPickers(); renderPreview(); });
-function renderPreview() {
-    if (!ed) return;
-    const name = $("fName").value.trim() || "Project name";
-    const url = normUrl($("fUrl").value);
-    const el = $("edPreview");
-    el.setAttribute("style", accentVars(ed.color));
-    el.innerHTML = `<span class="pc-tile">${icon(ed.icon)}</span><div><b>${esc(name)}</b><small>${esc(url ? hostPath(url) : "Paste the link below")}</small></div>`;
-}
-function saveEditor() {
-    const name = $("fName").value.trim();
-    const url = normUrl($("fUrl").value);
-    const desc = $("fDesc").value.trim();
-    if (!name) { $("fErr").textContent = "Give the project a name."; $("fName").focus(); return; }
-    if (!url) { $("fErr").textContent = "That link doesn't look right. Try something like spirttomb.github.io/My-Project/"; $("fUrl").focus(); return; }
-    const before = frontIndex();
-    if (ed.id) {
-        const p = store.projects.find(x => x.id === ed.id);
-        if (p) Object.assign(p, { name, url, desc, icon: ed.icon, color: ed.color });
-        saveStore();
-        rebuild(before);
-        showStatusMessage(`Saved ${name}.`, "success");
-    } else {
-        const p = { id: newId(), name, url, desc, icon: ed.icon, color: ed.color };
-        store.projects.push(p);
-        store.last = p.id;
-        saveStore();
-        freshId = p.id;
-        rebuild(before);
-        goTo(store.projects.length - 1);
-        showStatusMessage(`Added ${name}.`, "success");
-    }
-    closeModal("editModal");
-    if ($("manageModal").classList.contains("active")) renderManage();
-}
-function deleteEditing() {
-    if (!ed || !ed.id) return;
-    const i = store.projects.findIndex(x => x.id === ed.id);
-    if (i < 0) return;
-    if (!confirm(`Remove ${store.projects[i].name} from your projects?`)) return;
-    const name = store.projects[i].name;
-    store.projects.splice(i, 1);
-    saveStore();
-    rebuild(i);
-    closeModal("editModal");
-    if ($("manageModal").classList.contains("active")) renderManage();
-    showStatusMessage(`Removed ${name}.`, "success");
-}
-
-// ---------- Manage ----------
-function openManage() { renderManage(); openModal("manageModal"); }
-function renderManage() {
-    const ps = store.projects;
-    const missing = DEFAULTS.filter(d => !ps.some(p => p.id === d.id));
-    $("manageBody").innerHTML = `
-        <div class="mlist">${ps.length ? ps.map((p, i) => `
-            <div class="mrow">
-                <span class="pc-tile" style="${accentVars(p.color)}">${icon(p.icon)}</span>
-                <div class="mtext"><b>${esc(p.name)}</b><small>${esc(hostPath(p.url))}</small></div>
-                <div class="mbtns">
-                    <button type="button" class="mbtn" onclick="moveProject(${i}, -1)" ${i === 0 ? "disabled" : ""} aria-label="Move up"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"/></svg></button>
-                    <button type="button" class="mbtn" onclick="moveProject(${i}, 1)" ${i === ps.length - 1 ? "disabled" : ""} aria-label="Move down"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
-                    <button type="button" class="mbtn" data-id="${esc(p.id)}" onclick="openEditor(this.dataset.id)" aria-label="Edit">${ICON_PEN}</button>
-                    <button type="button" class="mbtn del" onclick="removeProject(${i})" aria-label="Remove"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+function renderHome() {
+    cur = null;
+    setSaveBar(false);
+    setHero("Sheets Editor", "Your project sheets", "Staff, checklists and headcount rules, all in one place", false);
+    $("panel").innerHTML = `
+        <div class="home-grid">
+            <section class="card">
+                <div class="card-head">
+                    <span class="tile staff">${IC.users}</span>
+                    <div><div class="card-title">Staff &amp; PINs</div><div class="card-sub">Names, PINs, roles and position ratings</div></div>
                 </div>
-            </div>`).join("") : `<div class="mempty">No projects yet.</div>`}
+                <div class="card-body">
+                    <p class="note" style="margin-bottom:0.9rem">Checklist Tracker sign-in and the Lineup Generator's staff list and ratings both come from this sheet.</p>
+                    <button type="button" class="btn-primary block" onclick="go('staff')">Edit staff</button>
+                </div>
+            </section>
+            <section class="card">
+                <div class="card-head">
+                    <span class="tile rules">${IC.rules}</span>
+                    <div><div class="card-title">Headcount rules</div><div class="card-sub">What happens to areas when you're short on people</div></div>
+                </div>
+                <div class="card-body">
+                    <p class="note" style="margin-bottom:0.9rem">For each closing headcount: which areas are hidden and where their work goes.</p>
+                    <button type="button" class="btn-primary block" onclick="go('rules')">Edit rules</button>
+                </div>
+            </section>
+            <section class="card wide">
+                <div class="card-head">
+                    <span class="tile check">${IC.check}</span>
+                    <div><div class="card-title">Checklists</div><div class="card-sub">Tasks, verify cards and preclose for every area</div></div>
+                </div>
+                <div class="card-body">
+                    ${CHECKLISTS.map(c => `
+                        <div class="area-group">
+                            <div class="group-label">${esc(c.title)}</div>
+                            <div class="area-grid">${Object.keys(c.zones).map(z =>
+                                `<button type="button" class="area-btn" data-h="${esc("check/" + c.id + "/" + z)}" onclick="go(this.dataset.h)">${esc(z)}${IC.chevR}</button>`).join("")}</div>
+                        </div>`).join("")}
+                </div>
+            </section>
         </div>
-        <div class="set-row">
-            <div><b>Open in a new tab</b><small>Keep this launcher open behind your project</small></div>
-            <button type="button" class="switch ${store.newTab ? "on" : ""}" onclick="toggleNewTab()" aria-label="Open in a new tab"><i></i></button>
+        <p class="note" style="text-align:center; margin-top:1.25rem">Every save keeps a copy of the old version in a hidden History tab in that spreadsheet.</p>`;
+}
+
+// =====================================================================
+// LOADING / SAVING (shared)
+// =====================================================================
+async function openSheet(view, sheetId, extra = {}) {
+    const titles = {
+        staff: ["Staff & PINs", "Staff", "Tap a person to change their details"],
+        rules: ["Headcount rules", "Headcount Rules", "Short on people? Pick which areas are hidden and where their work goes"],
+        checklist: [extra.shift ? extra.shift.title + " checklist" : "", extra.zone || "", "Tasks and steps people see for this area"]
+    }[view];
+    setHero(titles[0], titles[1], titles[2], true);
+    setSaveBar(false);
+    cur = { view, sheetId, ...extra, model: null, baseline: "", version: "", saving: false, stale: false, loading: true };
+    const me = cur;
+    $("panel").innerHTML = `<section class="card"><div class="loading"><div class="spinner"></div>Loading the sheet...</div></section>`;
+    try {
+        const j = await api("read", { sheetId });
+        if (cur !== me) return;
+        loadValues(j.values, j.version);
+        cur.loading = false;
+        renderView();
+    } catch (e) {
+        if (cur !== me) return;
+        if (/PIN|Too many wrong/i.test(e.message)) { signOut(); $("siErr").textContent = e.message; return; }
+        $("panel").innerHTML = `<section class="card"><div class="loading"><b style="color:#b91c1c">${esc(e.message)}</b><br><br>
+            <button type="button" class="btn-secondary" onclick="route()">Try again</button></div></section>`;
+    }
+}
+
+function loadValues(values, version) {
+    const v = (values || []).map(r => r.map(c => String(c == null ? "" : c)));
+    if (cur.view === "staff") cur.model = parseStaff(v);
+    else if (cur.view === "rules") cur.model = parseRules(v);
+    else cur.model = parseChecklist(v);
+    cur.version = version;
+    cur.stale = false;
+    cur.baseline = JSON.stringify(buildRows().rows);
+}
+
+function buildRows() {
+    if (cur.view === "staff") return buildStaff(cur.model);
+    if (cur.view === "rules") return buildRules(cur.model);
+    return buildChecklist(cur.model, cur.zone);
+}
+
+function isDirty() {
+    if (!cur || !cur.model) return false;
+    return JSON.stringify(buildRows().rows) !== cur.baseline;
+}
+
+function renderView() {
+    if (cur.view === "staff") renderStaff();
+    else if (cur.view === "rules") renderRules();
+    else renderChecklist();
+    touch();
+}
+
+function setSaveBar(on) {
+    $("saveBar").classList.toggle("on", on);
+    document.body.classList.toggle("has-savebar", on);
+}
+
+// Call after any change: refreshes the save bar
+function touch(msg, kind) {
+    if (!cur || !cur.model) return;
+    setSaveBar(true);
+    const dirty = isDirty();
+    const m = $("saveMsg");
+    $("saveBtn").disabled = !dirty || cur.saving || cur.stale;
+    $("discardBtn").disabled = (!dirty && !cur.stale) || cur.saving;
+    $("discardBtn").textContent = cur.stale ? "Reload" : "Discard";
+    if (msg) { m.textContent = msg; m.className = "save-msg " + (kind || ""); return; }
+    if (cur.stale) { m.textContent = "Someone else changed this sheet after you opened it. Reload to get the latest."; m.className = "save-msg err"; return; }
+    m.textContent = dirty ? "Unsaved changes" : "All changes saved";
+    m.className = "save-msg " + (dirty ? "dirty" : "");
+}
+
+function discardChanges() {
+    if (!cur) return;
+    if (!cur.stale && !confirm("Throw away your unsaved changes?")) return;
+    if (cur.stale && isDirty() && !confirm("Reloading will throw away your unsaved changes. Reload?")) return;
+    cur.baseline = "";
+    const c = cur;
+    openSheet(c.view, c.sheetId, { shift: c.shift, zone: c.zone });
+}
+
+async function saveCurrent() {
+    if (!cur || cur.saving || cur.stale) return;
+    const { rows, error, focus } = buildRows();
+    if (error) {
+        touch(error, "err");
+        if (focus) focus();
+        return;
+    }
+    cur.saving = true;
+    $("saveBtn").textContent = "Saving...";
+    touch("Saving...", "");
+    const me = cur;
+    try {
+        const ownBefore = cur.view === "staff" ? ownPin(cur.model) : null;
+        const j = await api("write", { sheetId: cur.sheetId, rows, version: cur.version });
+        if (cur !== me) return;
+        if (ownBefore !== null && ownBefore !== auth.pin) {
+            auth.pin = ownBefore;
+            try { sessionStorage.setItem("sheetsEditorPin", auth.pin); } catch (e) {}
+        }
+        const keep = cur.view === "staff" ? { open: null, search: cur.model.search, showPins: cur.model.showPins } : cur.view === "checklist" ? { tab: cur.model.tab } : cur.view === "rules" ? { period: cur.model.period } : {};
+        loadValues(j.values, j.version);
+        Object.assign(cur.model, keep);
+        cur.saving = false;
+        $("saveBtn").textContent = "Save changes";
+        renderView();
+        touch("Saved. The apps pick it up the next time they load.", "ok");
+        toast("Saved.", "success");
+    } catch (e) {
+        if (cur !== me) return;
+        cur.saving = false;
+        $("saveBtn").textContent = "Save changes";
+        if (e.code === "stale") { cur.stale = true; touch(); return; }
+        touch(e.message, "err");
+    }
+}
+
+// =====================================================================
+// STAFF
+// =====================================================================
+function normalizeSkillHeader(text) {
+    const key = String(text || "").toLowerCase().replace(/[^a-z]/g, "");
+    if (!key) return null;
+    return SKILL_ALIASES[key] || SKILLS.find(s => s.toLowerCase().replace(/[^a-z]/g, "") === key) || null;
+}
+
+function parseStaff(vals) {
+    const hasHeader = vals.length > 0 && /^name/i.test((vals[0][0] || "").trim());
+    const header = hasHeader ? vals[0].slice() : null;
+    const origWidth = Math.max(4, ...vals.map(r => r.length));
+    let width = origWidth;
+    const skillCol = {};
+    if (hasHeader) {
+        for (let c = 4; c < origWidth; c++) { const sk = normalizeSkillHeader(header[c]); if (sk && skillCol[sk] === undefined) skillCol[sk] = c; }
+        SKILLS.forEach(sk => { if (skillCol[sk] === undefined) skillCol[sk] = width++; });
+    } else {
+        SKILLS.forEach((sk, i) => { skillCol[sk] = 4 + i; });
+        width = Math.max(width, 4 + SKILLS.length);
+    }
+    const skillIdx = new Set(Object.values(skillCol));
+    const extras = [];
+    for (let c = 4; c < origWidth; c++) if (!skillIdx.has(c)) extras.push({ idx: c, label: (header && (header[c] || "").trim()) || "Column " + colLetter(c) });
+    const rows = vals.slice(hasHeader ? 1 : 0).filter(r => r.some(x => x.trim())).map(r => {
+        const cells = Array.from({ length: width }, (_, i) => (r[i] || "").trim());
+        return { uid: newUid(), cells, orig: JSON.stringify(cells), isNew: false, deleted: false };
+    });
+    return { hasHeader, header, origWidth, width, skillCol, extras, rows, open: null, search: "", showPins: false };
+}
+
+function liveRows(S) { return S.rows.filter(r => !r.deleted); }
+
+function staffErrors(S) {
+    const errs = {}, names = {}, pins = {};
+    liveRows(S).forEach(r => {
+        const n = r.cells[0].trim(), p = r.cells[1].trim();
+        if (!n) { errs[r.uid] = "Needs a name."; return; }
+        const k = n.toLowerCase();
+        if (names[k]) errs[r.uid] = `Another person is already named ${n}.`;
+        names[k] = true;
+        if (p && !/^\d+$/.test(p)) errs[r.uid] = "The PIN can only have numbers.";
+        else if (p) { if (pins[p]) errs[r.uid] = `Same PIN as ${pins[p]}.`; else pins[p] = n; }
+    });
+    return errs;
+}
+
+function ownPin(S) {
+    const me = liveRows(S).find(r => r.cells[0].trim().toLowerCase() === auth.name.toLowerCase());
+    return me ? me.cells[1].trim() : null;
+}
+
+function buildStaff(S) {
+    const live = liveRows(S);
+    const used = c => live.some(r => (r.cells[c] || "").trim());
+    let cols;
+    if (S.hasHeader) {
+        cols = [];
+        for (let c = 0; c < S.width; c++) if (c < S.origWidth || used(c)) cols.push(c);
+    } else {
+        let maxUsed = S.origWidth - 1;
+        for (let c = S.origWidth; c < S.width; c++) if (used(c)) maxUsed = c;
+        cols = Array.from({ length: maxUsed + 1 }, (_, i) => i);
+    }
+    const skillAt = c => Object.keys(S.skillCol).find(k => S.skillCol[k] === c) || "";
+    const rows = [];
+    if (S.hasHeader) rows.push(cols.map(c => c < S.origWidth ? (S.header[c] || "") : skillAt(c)));
+    live.forEach(r => rows.push(cols.map(c => (r.cells[c] || "").trim())));
+
+    let error = null, focus = null;
+    const errs = staffErrors(S);
+    const bad = live.find(r => errs[r.uid]);
+    if (!live.length) error = "Keep at least one person on the list.";
+    else if (bad) {
+        error = `${bad.cells[0].trim() || "Someone"}: ${errs[bad.uid]}`;
+        focus = () => { S.open = bad.uid; renderStaff(); scrollToPerson(bad.uid); };
+    } else if (ownPin(S) === null || ownPin(S) === "") {
+        error = "You can't remove or rename yourself, or clear your own PIN. It would lock you out of the editor.";
+    }
+    return { rows, error, focus };
+}
+
+function personStatus(r) {
+    if (r.isNew) return '<span class="tag new">New</span>';
+    if (JSON.stringify(r.cells) !== r.orig) return '<span class="tag edit">Edited</span>';
+    return "";
+}
+
+function personHeadHtml(r, errs) {
+    const S = cur.model;
+    const n = r.cells[0].trim(), role = r.cells[2].trim().toLowerCase(), house = r.cells[3].trim().toLowerCase();
+    const pin = r.cells[1].trim();
+    return `${`<span class="chip-avatar">${esc(initials(n))}</span>`}
+        <span class="p-name ${n ? "" : "empty"}">${esc(n || "No name yet")}</span>
+        ${errs[r.uid] ? '<span class="tag bad">Fix</span>' : personStatus(r)}
+        ${role === "leader" ? '<span class="tag leader">Leader</span>' : role && role !== "member" ? `<span class="tag leader">${esc(r.cells[2])}</span>` : ""}
+        ${house === "boh" ? '<span class="tag boh">BOH</span>' : ""}
+        <span class="p-pin">${pin ? (S.showPins ? esc(pin) : "•".repeat(Math.min(pin.length, 6))) : "no PIN"}</span>
+        ${IC.chevD}`;
+}
+
+function rateRow(r, sk) {
+    const c = cur.model.skillCol[sk];
+    const v = (r.cells[c] || "").trim();
+    const val = /^[1-5]$/.test(v) ? +v : 0;
+    return `<div class="rate-row"><span>${esc(sk)}</span><div class="rate">
+        ${[0, 1, 2, 3, 4, 5].map(n => `<button type="button" class="${val === n ? "on r" + n : ""}" title="${n ? n : "Not rated (counts as 3)"}" onclick="setCell('${r.uid}', ${c}, '${n || ""}', true)">${n || "–"}</button>`).join("")}
+    </div></div>`;
+}
+
+function personFormHtml(r, errs) {
+    const S = cur.model;
+    const role = r.cells[2].trim().toLowerCase(), house = r.cells[3].trim().toLowerCase();
+    const pin = r.cells[1].trim();
+    const customRole = role && role !== "leader" && role !== "member";
+    return `<div class="p-form">
+        <div class="p-grid">
+            <div><label class="lbl">Name</label><input class="field" value="${esc(r.cells[0])}" placeholder="First name and last initial" oninput="setCell('${r.uid}', 0, this.value)" data-first="1"></div>
+            <div><label class="lbl">PIN</label><input class="field" value="${esc(r.cells[1])}" inputmode="numeric" placeholder="4 digits" oninput="setCell('${r.uid}', 1, this.value.replace(/\\s/g, ''))">
+                ${pin && pin.length !== 4 ? `<div class="hint-line">Checklist sign-in uses 4-digit PINs.</div>` : ""}</div>
         </div>
-        <div class="manage-foot">
-            <button type="button" class="btn-primary block" onclick="openEditor(null)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Add Project</button>
-            ${missing.length ? `<button type="button" class="link-btn" onclick="restoreDefaults()">Restore ${missing.map(d => d.name).join(", ")}</button>` : ""}
-        </div>`;
+        <div class="p-row">
+            <div><label class="lbl">Role</label><div class="seg">
+                <button type="button" class="${role === "member" || !role ? "on" : ""}" onclick="setCell('${r.uid}', 2, 'member', true)">Team Member</button>
+                <button type="button" class="${role === "leader" ? "on" : ""}" onclick="setCell('${r.uid}', 2, 'leader', true)">Leader</button>
+                ${customRole ? `<button type="button" class="on">${esc(r.cells[2])}</button>` : ""}
+            </div></div>
+            <div><label class="lbl">House</label><div class="seg">
+                <button type="button" class="${house !== "boh" ? "on" : ""}" onclick="setCell('${r.uid}', 3, 'foh', true)">Front (FOH)</button>
+                <button type="button" class="${house === "boh" ? "on" : ""}" onclick="setCell('${r.uid}', 3, 'boh', true)">Back (BOH)</button>
+            </div></div>
+        </div>
+        <div class="sub-title">Position ratings <span style="text-transform:none;letter-spacing:0;font-weight:600">· 1 needs work, 5 is an ace</span></div>
+        <div class="ratings">${SKILLS.map(sk => rateRow(r, sk)).join("")}</div>
+        ${S.extras.length ? `<div class="sub-title">Other columns</div><div class="p-grid" style="margin-top:0.4rem">${S.extras.map(x =>
+            `<div><label class="lbl">${esc(x.label)}</label><input class="field" value="${esc(r.cells[x.idx])}" oninput="setCell('${r.uid}', ${x.idx}, this.value)"></div>`).join("")}</div>` : ""}
+        ${errs[r.uid] ? `<div class="err-line">${esc(errs[r.uid])}</div>` : ""}
+        <div class="p-foot">
+            <button type="button" class="link-btn danger" onclick="removePerson('${r.uid}')">Remove ${esc(r.cells[0].trim() || "this person")}</button>
+            ${r.isNew ? "" : JSON.stringify(r.cells) !== r.orig ? `<button type="button" class="link-btn" onclick="undoPerson('${r.uid}')">Undo changes to this person</button>` : ""}
+        </div>
+    </div>`;
 }
-function moveProject(i, dir) {
-    const j = i + dir, ps = store.projects;
-    if (j < 0 || j >= ps.length) return;
-    const frontItem = items[frontIndex()];
-    [ps[i], ps[j]] = [ps[j], ps[i]];
-    saveStore();
-    const keep = frontItem && frontItem.p ? ps.findIndex(p => p.id === frontItem.p.id) : ps.length;
-    rebuild(keep);
-    renderManage();
+
+function personHtml(r, errs) {
+    const role = r.cells[2].trim().toLowerCase();
+    return `<div class="person ${cur.model.open === r.uid ? "open" : ""} ${role === "leader" ? "leader" : ""}" id="p-${r.uid}">
+        <button type="button" class="p-head" onclick="togglePerson('${r.uid}')">${personHeadHtml(r, errs)}</button>
+        ${cur.model.open === r.uid ? personFormHtml(r, errs) : ""}
+    </div>`;
 }
-function removeProject(i) {
-    const p = store.projects[i];
-    if (!p || !confirm(`Remove ${p.name} from your projects?`)) return;
-    store.projects.splice(i, 1);
-    saveStore();
-    rebuild(Math.min(frontIndex(), store.projects.length));
-    renderManage();
-    showStatusMessage(`Removed ${p.name}.`, "success");
+
+function matchesSearch(r, q) {
+    if (!q) return true;
+    return r.cells[0].toLowerCase().includes(q) || r.cells[1].includes(q);
 }
-function restoreDefaults() {
-    DEFAULTS.forEach(d => { if (!store.projects.some(p => p.id === d.id)) store.projects.push({ ...d }); });
-    saveStore();
-    rebuild(frontIndex());
-    renderManage();
-    showStatusMessage("Restored.", "success");
+
+function renderStaff() {
+    const S = cur.model;
+    const live = liveRows(S);
+    const removed = S.rows.filter(r => r.deleted && !r.isNew).length;
+    $("panel").innerHTML = `
+        <section class="card">
+            <div class="card-head">
+                <div><div class="card-title">Staff list</div><div class="card-sub">${S.hasHeader ? "Ratings are matched by the column headers in the sheet" : "Ratings are in columns E–M"}</div></div>
+                <span class="count-pill push" id="staffCount">${live.length} ${live.length === 1 ? "person" : "people"}</span>
+            </div>
+            <div class="toolbar">
+                <div class="search-field">${IC.search}<input class="field" id="staffSearch" placeholder="Search by name or PIN" value="${esc(S.search)}" oninput="cur.model.search=this.value; renderStaffList()"></div>
+                <button type="button" class="btn-secondary ${S.showPins ? "on" : ""}" onclick="cur.model.showPins=!cur.model.showPins; renderStaff()">${IC.eye} PINs</button>
+                <button type="button" class="btn-secondary" onclick="sortStaff()" title="Sort the sheet A to Z">${IC.sort} A–Z</button>
+                <button type="button" class="btn-dark" onclick="addPerson()">${IC.plus} Add person</button>
+            </div>
+            <div class="people" id="staffList"></div>
+            ${removed ? `<div class="card-body" style="padding-top:0.8rem"><span class="note">${removed} ${removed === 1 ? "person" : "people"} will be removed when you save.</span>
+                <button type="button" class="link-btn" onclick="cur.model.rows.forEach(r => r.deleted = false); renderStaff(); touch()">Bring them back</button></div>` : ""}
+        </section>`;
+    renderStaffList();
 }
-function toggleNewTab() { store.newTab = !store.newTab; saveStore(); renderManage(); }
+
+function renderStaffList() {
+    const S = cur.model;
+    const q = S.search.trim().toLowerCase();
+    const errs = staffErrors(S);
+    const list = liveRows(S).filter(r => r.isNew || r.uid === S.open || matchesSearch(r, q));
+    $("staffList").innerHTML = list.length ? list.map(r => personHtml(r, errs)).join("")
+        : `<div class="empty-note">${q ? "Nobody matches that search." : "Nobody on the list yet."}</div>`;
+}
+
+function refreshPersonHead(uid) {
+    const r = cur.model.rows.find(x => x.uid === uid);
+    const el = document.querySelector(`#p-${uid} > .p-head`);
+    if (r && el) el.innerHTML = personHeadHtml(r, staffErrors(cur.model));
+}
+
+function scrollToPerson(uid) {
+    const el = $("p-" + uid);
+    if (el) el.scrollIntoView({ block: "center", behavior: "smooth" });
+}
+
+function togglePerson(uid) {
+    const S = cur.model;
+    S.open = S.open === uid ? null : uid;
+    renderStaffList();
+    if (S.open) {
+        const el = $("p-" + uid);
+        if (el) {
+            const top = el.getBoundingClientRect().top;
+            if (top < 70 || top > window.innerHeight - 200) el.scrollIntoView({ block: "start", behavior: "smooth" });
+        }
+    }
+}
+
+function setCell(uid, col, val, rerender) {
+    const r = cur.model.rows.find(x => x.uid === uid);
+    if (!r) return;
+    r.cells[col] = val;
+    if (rerender) {
+        const el = $("p-" + uid);
+        if (el) el.outerHTML = personHtml(r, staffErrors(cur.model));
+    } else refreshPersonHead(uid);
+    const pill = $("staffCount");
+    if (pill) { const n = liveRows(cur.model).length; pill.textContent = `${n} ${n === 1 ? "person" : "people"}`; }
+    touch();
+}
+
+function addPerson() {
+    const S = cur.model;
+    const r = { uid: newUid(), cells: Array.from({ length: S.width }, () => ""), orig: "", isNew: true, deleted: false };
+    r.cells[2] = "member";
+    r.cells[3] = "foh";
+    S.rows.push(r);
+    S.open = r.uid;
+    S.search = "";
+    renderStaff();
+    touch();
+    scrollToPerson(r.uid);
+    setTimeout(() => { const i = document.querySelector(`#p-${r.uid} [data-first]`); if (i) i.focus({ preventScroll: true }); }, 250);
+}
+
+function removePerson(uid) {
+    const S = cur.model;
+    const r = S.rows.find(x => x.uid === uid);
+    if (!r) return;
+    const n = r.cells[0].trim();
+    if (n && n.toLowerCase() === auth.name.toLowerCase()) { toast("You can't remove yourself.", "error"); return; }
+    if (n && !confirm(`Remove ${n} from the staff list? They won't be able to sign in to the Checklist Tracker.`)) return;
+    if (r.isNew) S.rows = S.rows.filter(x => x !== r); else r.deleted = true;
+    S.open = null;
+    renderStaff();
+    touch();
+}
+
+function undoPerson(uid) {
+    const r = cur.model.rows.find(x => x.uid === uid);
+    if (!r || r.isNew) return;
+    r.cells = JSON.parse(r.orig);
+    const el = $("p-" + uid);
+    if (el) el.outerHTML = personHtml(r, staffErrors(cur.model));
+    touch();
+}
+
+function sortStaff() {
+    const S = cur.model;
+    S.rows.sort((a, b) => a.cells[0].trim().localeCompare(b.cells[0].trim()));
+    renderStaffList();
+    touch();
+    toast("Sorted A–Z. Save to keep the new order in the sheet.");
+}
+
+// =====================================================================
+// CHECKLIST
+// =====================================================================
+const SECTIONS = ["Do", "Verify", "Preclose"];
+const SECTION_LABEL = { Do: "Checklist", Verify: "Verify", Preclose: "Preclose" };
+const SECTION_HINT = {
+    Do: "The cards people flip as they work this area.",
+    Verify: "What the leader checks when verifying this area. Leave empty to use the built-in verify cards.",
+    Preclose: "Tasks people can do early, before close. Offered when they open this area."
+};
+
+function parseChecklist(values) {
+    const typeOf = c => String(c || "").trim().toLowerCase();
+    const isType = v => ["do", "verify", "preclose", "title"].includes(v);
+    let typeCol = -1;
+    for (const col of [4, 3, 2]) if (values.some(r => isType(typeOf(r[col])))) { typeCol = col; break; }
+    const L = typeCol === 4 ? { sub: 1, task: 2, step: 3, type: 4 }
+        : typeCol === 3 ? { sub: 0, task: 1, step: 2, type: 3 }
+        : typeCol === 2 ? { sub: -1, task: 0, step: 1, type: 2 }
+        : { sub: -1, task: 0, step: 1, type: -1 };
+    const model = { title: "", sections: {}, tab: "Do" };
+    SECTIONS.forEach(s => { model.sections[s] = { subtitle: "", tasks: [] }; });
+    values.forEach(r => {
+        const task = (r[L.task] || "").trim();
+        const step = (r[L.step] || "").trim();
+        const type = L.type >= 0 ? typeOf(r[L.type]) : "do";
+        if (task.toLowerCase() === "task" && step.toLowerCase() === "step") return;
+        if (type === "title") { if (!model.title) model.title = task || step; return; }
+        if (!task || !step) return;
+        const sec = model.sections[type === "verify" ? "Verify" : type === "preclose" ? "Preclose" : "Do"];
+        const sub = L.sub >= 0 ? (r[L.sub] || "").trim() : "";
+        if (sub && !sec.subtitle) sec.subtitle = sub;
+        let t = sec.tasks.find(x => x.title === task);
+        if (!t) { t = { uid: newUid(), title: task, steps: [] }; sec.tasks.push(t); }
+        t.steps.push(step);
+    });
+    return model;
+}
+
+function buildChecklist(M, zone) {
+    const rows = [["Area", "Subtitle", "Task", "Step", "Type"]];
+    let error = null, focus = null;
+    if (M.title.trim()) rows.push([zone, "", M.title.trim(), "", "Title"]);
+    SECTIONS.forEach(name => {
+        const sec = M.sections[name];
+        const seen = {};
+        sec.tasks.forEach(t => {
+            const title = t.title.trim();
+            const steps = t.steps.map(s => s.trim()).filter(Boolean);
+            if (!title && !steps.length) return;
+            const fix = () => { M.tab = name; renderChecklist(); const el = document.querySelector(`[data-tu="${t.uid}"]`); if (el) el.scrollIntoView({ block: "center", behavior: "smooth" }); };
+            if (!error && !title) { error = `${SECTION_LABEL[name]}: a task has steps but no name.`; focus = fix; }
+            else if (!error && !steps.length) { error = `${SECTION_LABEL[name]}: "${title}" needs at least one step.`; focus = fix; }
+            else if (!error && seen[title.toLowerCase()]) { error = `${SECTION_LABEL[name]}: two tasks are named "${title}". Give them different names.`; focus = fix; }
+            seen[title.toLowerCase()] = true;
+            if (title && steps.length) steps.forEach(s => rows.push([zone, name === "Verify" ? "" : sec.subtitle.trim(), title, s, name]));
+        });
+    });
+    if (!error && !M.sections.Do.tasks.some(t => t.title.trim() && t.steps.some(s => s.trim()))) {
+        error = "The checklist needs at least one task.";
+        focus = () => { M.tab = "Do"; renderChecklist(); };
+    }
+    return { rows, error, focus };
+}
+
+function hasPreclose() {
+    const M = cur.model;
+    return (PRECLOSE_ZONES[cur.shift.id] || []).includes(cur.zone) || M.sections.Preclose.tasks.length > 0;
+}
+
+function renderChecklist() {
+    const M = cur.model;
+    const tabs = SECTIONS.filter(s => s !== "Preclose" || hasPreclose());
+    if (!tabs.includes(M.tab)) M.tab = "Do";
+    const sec = M.sections[M.tab];
+    const count = s => M.sections[s].tasks.length;
+    $("panel").innerHTML = `
+        <section class="card">
+            <div class="card-head">
+                <div style="flex:1; min-width: 14rem">
+                    <label class="lbl" for="ckTitle">Card title</label>
+                    <input class="field" id="ckTitle" value="${esc(M.title)}" placeholder="${esc(cur.zone)} (leave empty to use the area name)" oninput="cur.model.title=this.value; touch()">
+                </div>
+            </div>
+            <div class="ck-tabs" style="margin-top:0.6rem">
+                <div class="seg">${tabs.map(t => `<button type="button" class="${t === M.tab ? "on" : ""}" onclick="cur.model.tab='${t}'; renderChecklist()">${SECTION_LABEL[t]} <span style="opacity:0.6">${count(t)}</span></button>`).join("")}</div>
+            </div>
+            <p class="ck-hint">${SECTION_HINT[M.tab]} Drag ${IC.grip.replace('width="16" height="16"', 'width="13" height="13" style="vertical-align:-2px"')} to reorder.</p>
+            <div class="card-body">
+                ${M.tab !== "Verify" ? `<div style="margin-bottom:1rem">
+                    <label class="lbl" for="ckSub">${M.tab === "Preclose" ? 'Preclose start time, e.g. "Start at 8:00 PM"' : "Subtitle under the area name (optional)"}</label>
+                    <input class="field" id="ckSub" value="${esc(sec.subtitle)}" oninput="ckSec().subtitle=this.value; touch()">
+                </div>` : ""}
+                <div id="ckTasks">${sec.tasks.map((t, ti) => taskHtml(t, ti)).join("")}</div>
+                ${sec.tasks.length ? "" : `<p class="note" style="margin-bottom:0.8rem">No ${SECTION_LABEL[M.tab].toLowerCase()} tasks yet.</p>`}
+                <button type="button" class="add-dashed" onclick="ckAddTask()">+ Add task</button>
+            </div>
+        </section>`;
+    document.querySelectorAll("#ckTasks textarea").forEach(autosize);
+}
+
+function taskHtml(t, ti) {
+    return `<div class="task" data-ti="${ti}" data-tu="${t.uid}">
+        <div class="task-head">
+            <span class="handle" title="Drag to reorder">${IC.grip}</span>
+            <span class="task-num">${ti + 1}</span>
+            <input class="field" value="${esc(t.title)}" placeholder="Task name (e.g. Clean Lowboy)" oninput="ckSec().tasks[${ti}].title=this.value; touch()">
+            <button type="button" class="icon-x" title="Delete task" onclick="ckDelTask(${ti})">${IC.x}</button>
+        </div>
+        <div class="steps">
+            ${t.steps.map((s, si) => `<div class="step" data-si="${si}">
+                <span class="handle" title="Drag to reorder">${IC.grip}</span>
+                <textarea class="field" rows="1" placeholder="Step description" oninput="ckSec().tasks[${ti}].steps[${si}]=this.value; autosize(this); touch()">${esc(s)}</textarea>
+                <button type="button" class="icon-x" title="Delete step" onclick="ckDelStep(${ti}, ${si})">${IC.x}</button>
+            </div>`).join("")}
+            <button type="button" class="add-dashed small" onclick="ckAddStep(${ti})">+ Add step</button>
+        </div>
+    </div>`;
+}
+
+function ckSec() { return cur.model.sections[cur.model.tab]; }
+function ckAddTask() {
+    ckSec().tasks.push({ uid: newUid(), title: "", steps: [""] });
+    renderChecklist(); touch();
+    const all = document.querySelectorAll("#ckTasks .task");
+    const last = all[all.length - 1];
+    if (last) { last.scrollIntoView({ block: "center", behavior: "smooth" }); last.querySelector(".task-head input").focus({ preventScroll: true }); }
+}
+function ckAddStep(ti) {
+    ckSec().tasks[ti].steps.push("");
+    renderChecklist(); touch();
+    const t = document.querySelectorAll("#ckTasks .task")[ti];
+    if (t) { const ta = t.querySelectorAll(".step textarea"); const l = ta[ta.length - 1]; if (l) l.focus(); }
+}
+function ckDelTask(ti) {
+    const t = ckSec().tasks[ti];
+    if ((t.title.trim() || t.steps.some(s => s.trim())) && !confirm(`Delete the task "${t.title.trim() || "untitled"}" and its steps?`)) return;
+    ckSec().tasks.splice(ti, 1);
+    renderChecklist(); touch();
+}
+function ckDelStep(ti, si) {
+    const steps = ckSec().tasks[ti].steps;
+    steps.splice(si, 1);
+    if (!steps.length) steps.push("");
+    renderChecklist(); touch();
+}
+
+// Drag to reorder tasks and steps (mouse and touch)
+document.addEventListener("pointerdown", e => {
+    const handle = e.target.closest && e.target.closest("#ckTasks .handle");
+    if (!handle || !cur || cur.view !== "checklist") return;
+    const item = handle.closest(".step") || handle.closest(".task");
+    if (!item) return;
+    e.preventDefault();
+    const isTask = item.classList.contains("task");
+    const container = item.parentElement;
+    item.classList.add("dragging");
+    let lastY = e.clientY, scroller = null;
+    const move = ev => {
+        lastY = ev.clientY;
+        const sibs = Array.from(container.children).filter(c => c !== item && c.classList.contains(isTask ? "task" : "step"));
+        let placed = false;
+        for (const s of sibs) {
+            const r = s.getBoundingClientRect();
+            if (lastY < r.top + r.height / 2) { container.insertBefore(item, s); placed = true; break; }
+        }
+        if (!placed) {
+            const addBtn = isTask ? null : container.querySelector(".add-dashed");
+            container.insertBefore(item, addBtn);
+        }
+    };
+    scroller = setInterval(() => {
+        if (lastY < 90) window.scrollBy(0, -12);
+        else if (lastY > window.innerHeight - 110) window.scrollBy(0, 12);
+    }, 16);
+    const up = () => {
+        clearInterval(scroller);
+        document.removeEventListener("pointermove", move);
+        document.removeEventListener("pointerup", up);
+        document.removeEventListener("pointercancel", up);
+        item.classList.remove("dragging");
+        const attr = isTask ? "data-ti" : "data-si";
+        const order = Array.from(container.children).filter(c => c.hasAttribute(attr)).map(c => parseInt(c.getAttribute(attr), 10));
+        if (order.some((v, i) => v !== i)) {
+            if (isTask) { const list = ckSec().tasks; ckSec().tasks = order.map(i => list[i]); }
+            else {
+                const ti = parseInt(item.closest(".task").getAttribute("data-ti"), 10);
+                const list = ckSec().tasks[ti].steps;
+                ckSec().tasks[ti].steps = order.map(i => list[i]);
+            }
+        }
+        renderChecklist();
+        touch();
+    };
+    document.addEventListener("pointermove", move);
+    document.addEventListener("pointerup", up);
+    document.addEventListener("pointercancel", up);
+});
+
+// =====================================================================
+// HEADCOUNT RULES
+// Sheet: Period | Headcount | Hidden Zone | Absorbing Period | Absorbing Zone | Extra Task | Extra Step | Display Name
+// Extra Task "*" moves the hidden zone's whole checklist.
+// =====================================================================
+const RULE_HEADER = ["Period", "Headcount", "Hidden Zone", "Absorbing Period", "Absorbing Zone", "Extra Task", "Extra Step", "Display Name"];
+function periodKey(raw) { const d = String(raw || "").replace(/\D/g, ""); return d === "930" || d === "1030" ? d : null; }
+function zonesFor(p) {
+    const shift = CHECKLISTS.find(c => c.id === PERIODS[p].shift);
+    const names = Object.keys(shift.zones);
+    (cur && cur.model && cur.model.rules ? cur.model.rules : []).forEach(r => {
+        if (r.period === p && r.hidden && !names.includes(r.hidden)) names.push(r.hidden);
+        if (r.absPeriod === p && r.absZone && !names.includes(r.absZone)) names.push(r.absZone);
+    });
+    return names;
+}
+
+function parseRules(values) {
+    const rules = [], junk = [];
+    let width = 8;
+    values.forEach((r, i) => {
+        const c = k => (r[k] || "").trim();
+        if (i === 0 && c(0).toLowerCase() === "period") { width = Math.max(width, r.length); return; }
+        if (!r.some(x => x.trim())) return;
+        width = Math.max(width, r.length);
+        const p = periodKey(c(0)), hc = parseInt(c(1), 10);
+        if (!p || isNaN(hc) || !c(2)) { junk.push(r.slice()); return; }
+        const absZone = c(4);
+        const task = c(5);
+        rules.push({
+            uid: newUid(), period: p, hc, hidden: c(2),
+            absPeriod: periodKey(c(3)) || p, absZone,
+            mode: !absZone ? "whole" : task === "*" ? "whole" : task ? "task" : "none",
+            task: task === "*" ? "" : task, step: c(6), display: c(7),
+            extra: r.slice(8)
+        });
+    });
+    return { rules, junk, width, period: "930", addHc: "" };
+}
+
+function buildRules(M) {
+    const rows = [RULE_HEADER.slice()];
+    let error = null, focus = null;
+    const sorted = M.rules.slice().sort((a, b) => (a.period === b.period ? 0 : a.period === "930" ? -1 : 1) || a.hc - b.hc);
+    const seen = {};
+    sorted.forEach(r => {
+        const fix = () => { M.period = r.period; renderRules(); const el = document.querySelector(`[data-ru="${r.uid}"]`); if (el) el.scrollIntoView({ block: "center", behavior: "smooth" }); };
+        const err = ruleError(r, seen);
+        if (err && !error) { error = `${PERIODS[r.period].label}, ${r.hc} people: ${err}`; focus = fix; }
+        seen[`${r.period}|${r.hc}|${r.hidden}`] = true;
+        const dest = !!r.absZone;
+        rows.push([
+            r.period, String(r.hc), r.hidden,
+            dest ? r.absPeriod : "", dest ? r.absZone : "",
+            dest ? (r.mode === "whole" ? "*" : r.mode === "task" ? r.task.trim() : "") : "",
+            dest && r.mode === "task" ? r.step.trim() : "",
+            dest ? r.display.trim() : "",
+            ...r.extra
+        ]);
+    });
+    M.junk.forEach(j => rows.push(j.slice()));
+    const w = Math.max(8, ...rows.map(r => r.length));
+    return { rows: rows.map(r => Array.from({ length: w }, (_, i) => r[i] || "")), error, focus };
+}
+
+function ruleError(r, seen) {
+    if (!r.hidden) return "pick the area to hide.";
+    if (seen && seen[`${r.period}|${r.hc}|${r.hidden}`]) return `${r.hidden} is hidden twice.`;
+    if (r.absZone && r.absZone === r.hidden && r.absPeriod === r.period) return "an area can't take its own work.";
+    if (r.absZone && r.mode === "task" && !r.task.trim()) return "give the extra task a name.";
+    return null;
+}
+
+function ruleSummary(r) {
+    if (!r.hidden) return "Pick an area to hide.";
+    const where = r.absZone ? `<b>${esc(r.absZone)}</b>${r.absPeriod !== r.period ? ` (${PERIODS[r.absPeriod].label})` : ""}` : "";
+    let s = `<b>${esc(r.hidden)}</b> is hidden`;
+    if (!r.absZone) s += " and nobody picks up its work.";
+    else if (r.mode === "whole") s += `. Its whole checklist is added to ${where}.`;
+    else if (r.mode === "task") s += `. ${where} gets an extra task${r.task.trim() ? `: <b>${esc(r.task.trim())}</b>` : ""}.`;
+    else s += `.`;
+    if (r.absZone && r.display.trim()) s += ` ${where} shows as <b>${esc(r.display.trim())}</b>.`;
+    return s;
+}
+
+function zoneOptions(p, sel, placeholder) {
+    const names = zonesFor(p);
+    return (placeholder ? `<option value="">${esc(placeholder)}</option>` : "") + names.map(n => `<option ${n === sel ? "selected" : ""}>${esc(n)}</option>`).join("");
+}
+function destOptions(r) {
+    const val = r.absZone ? r.absPeriod + "|" + r.absZone : "";
+    let html = `<option value="" ${val ? "" : "selected"}>Nobody (just hide it)</option>`;
+    ["930", "1030"].forEach(p => {
+        html += `<optgroup label="${PERIODS[p].label}">${zonesFor(p).filter(n => !(p === r.period && n === r.hidden)).map(n =>
+            `<option value="${esc(p + "|" + n)}" ${val === p + "|" + n ? "selected" : ""}>${esc(n)}</option>`).join("")}</optgroup>`;
+    });
+    return html;
+}
+
+function ruleHtml(r) {
+    const err = ruleError(r);
+    return `<div class="rule ${err && r.hidden ? "bad" : ""}" data-ru="${r.uid}">
+        <div class="rule-line">
+            <span class="rule-k">Hide</span>
+            <select class="sel" onchange="setRule('${r.uid}', 'hidden', this.value, true)">${zoneOptions(r.period, r.hidden, "Pick an area")}</select>
+            <button type="button" class="icon-x" title="Delete this rule" onclick="delRule('${r.uid}')">${IC.x}</button>
+        </div>
+        <div class="rule-line">
+            <span class="rule-k">Its work goes to</span>
+            <select class="sel" onchange="setDest('${r.uid}', this.value)">${destOptions(r)}</select>
+            <span></span>
+        </div>
+        ${r.absZone ? `
+        <div class="rule-line">
+            <span class="rule-k">What moves</span>
+            <div class="seg">
+                <button type="button" class="${r.mode === "whole" ? "on" : ""}" onclick="setRule('${r.uid}', 'mode', 'whole', true)">Whole checklist</button>
+                <button type="button" class="${r.mode === "task" ? "on" : ""}" onclick="setRule('${r.uid}', 'mode', 'task', true)">One task</button>
+                <button type="button" class="${r.mode === "none" ? "on" : ""}" onclick="setRule('${r.uid}', 'mode', 'none', true)">Nothing</button>
+            </div>
+            <span></span>
+        </div>
+        ${r.mode === "task" ? `<div class="rule-line two">
+            <span class="rule-k">Extra task</span>
+            <input class="field" value="${esc(r.task)}" placeholder="Task name, e.g. Bathroom Trash" oninput="setRule('${r.uid}', 'task', this.value)">
+            <input class="field" value="${esc(r.step)}" placeholder="Step (optional)" oninput="setRule('${r.uid}', 'step', this.value)">
+        </div>` : ""}
+        <div class="rule-line">
+            <span class="rule-k">Rename to</span>
+            <input class="field" value="${esc(r.display)}" placeholder="Keep the name ${esc(r.absZone)}" oninput="setRule('${r.uid}', 'display', this.value)">
+            <span></span>
+        </div>` : ""}
+        <div class="rule-sum" id="sum-${r.uid}">${ruleSummary(r)}</div>
+    </div>`;
+}
+
+function renderRules() {
+    const M = cur.model;
+    const p = M.period;
+    const mine = M.rules.filter(r => r.period === p);
+    const counts = [...new Set(mine.map(r => r.hc))].sort((a, b) => b - a);
+    const used = new Set(counts);
+    const free = [];
+    for (let n = PERIODS[p].max; n >= PERIODS[p].min; n--) if (!used.has(n)) free.push(n);
+    // Suggest the next count below the smallest one that already has rules
+    const lowest = counts.length ? Math.min(...counts) : null;
+    const suggest = free.find(n => lowest === null || n < lowest) ?? free[0];
+    const n930 = M.rules.filter(r => r.period === "930").length, n1030 = M.rules.filter(r => r.period === "1030").length;
+    $("panel").innerHTML = `
+        <section class="card">
+            <div class="card-head">
+                <div class="seg">
+                    <button type="button" class="${p === "930" ? "on" : ""}" onclick="cur.model.period='930'; renderRules()">9:30 Close <span style="opacity:0.6">${n930}</span></button>
+                    <button type="button" class="${p === "1030" ? "on" : ""}" onclick="cur.model.period='1030'; renderRules()">10:30 Close <span style="opacity:0.6">${n1030}</span></button>
+                </div>
+            </div>
+            <div class="card-body">
+                <p class="note" style="margin-bottom:1rem">${p === "930"
+                    ? "The 9:30 headcount counts the 9s plus any 10s left over after the 10:30 areas are covered. With more people than any rule below, every area stays open."
+                    : "The 10:30 headcount counts the people closing until 10:30. With more people than any rule below, every area stays open."}</p>
+                ${counts.map(hc => `
+                    <div class="hc-group">
+                        <div class="hc-head">
+                            <span class="hc-num">${hc}</span>
+                            <div><b>With ${hc} ${hc === 1 ? "person" : "people"}</b><small>${mine.filter(r => r.hc === hc).length} ${mine.filter(r => r.hc === hc).length === 1 ? "area" : "areas"} hidden</small></div>
+                            <button type="button" class="link-btn danger push" onclick="delHeadcount(${hc})">Remove</button>
+                        </div>
+                        ${mine.filter(r => r.hc === hc).map(ruleHtml).join("")}
+                        <div class="hc-add"><button type="button" class="add-dashed small" onclick="addRule(${hc})">+ Hide another area</button></div>
+                    </div>`).join("") || `<div class="empty-note" style="padding:1rem 0 1.4rem">No rules for the ${PERIODS[p].label} yet, so every area always stays open.</div>`}
+                <div class="add-hc">
+                    <span class="rule-k">Add a headcount:</span>
+                    <select class="sel" id="addHcSel">${free.map(n => `<option value="${n}" ${n === suggest ? "selected" : ""}>${n} ${n === 1 ? "person" : "people"}</option>`).join("")}</select>
+                    <button type="button" class="btn-dark" onclick="addHeadcount()" ${free.length ? "" : "disabled"}>${IC.plus} Add</button>
+                </div>
+                ${M.junk.length ? `<p class="note" style="margin-top:1rem">${M.junk.length} row${M.junk.length === 1 ? "" : "s"} in the sheet couldn't be read as a rule and will be kept as ${M.junk.length === 1 ? "it is" : "they are"}.</p>` : ""}
+            </div>
+        </section>`;
+}
+
+function findRule(uid) { return cur.model.rules.find(r => r.uid === uid); }
+function setRule(uid, key, val, rerender) {
+    const r = findRule(uid);
+    if (!r) return;
+    r[key] = val;
+    if (key === "hidden" && r.absZone === val && r.absPeriod === r.period) r.absZone = "";
+    if (rerender) renderRules();
+    else { const s = $("sum-" + uid); if (s) s.innerHTML = ruleSummary(r); }
+    touch();
+}
+function setDest(uid, val) {
+    const r = findRule(uid);
+    if (!r) return;
+    if (!val) { r.absZone = ""; }
+    else {
+        const [p, ...z] = val.split("|");
+        r.absPeriod = p;
+        r.absZone = z.join("|");
+        if (r.mode === "none" && !r.display) r.mode = "whole";
+    }
+    renderRules();
+    touch();
+}
+function addRule(hc) {
+    const p = cur.model.period;
+    const taken = new Set(cur.model.rules.filter(r => r.period === p && r.hc === hc).map(r => r.hidden));
+    const first = zonesFor(p).find(z => !taken.has(z)) || "";
+    const r = { uid: newUid(), period: p, hc, hidden: first, absPeriod: p, absZone: "", mode: "whole", task: "", step: "", display: "", extra: [] };
+    cur.model.rules.push(r);
+    renderRules();
+    touch();
+    const el = document.querySelector(`[data-ru="${r.uid}"]`);
+    if (el) el.scrollIntoView({ block: "center", behavior: "smooth" });
+}
+function delRule(uid) {
+    cur.model.rules = cur.model.rules.filter(r => r.uid !== uid);
+    renderRules();
+    touch();
+}
+function delHeadcount(hc) {
+    const p = cur.model.period;
+    if (!confirm(`Remove every rule for ${hc} ${hc === 1 ? "person" : "people"} on the ${PERIODS[p].label}?`)) return;
+    cur.model.rules = cur.model.rules.filter(r => !(r.period === p && r.hc === hc));
+    renderRules();
+    touch();
+}
+function addHeadcount() {
+    const sel = $("addHcSel");
+    if (!sel || !sel.value) return;
+    addRule(+sel.value);
+}
 
 // =====================================================================
 // START
 // =====================================================================
-sizes();
-renderRing();
-const startAt = Math.max(0, store.projects.findIndex(p => p.id === store.last));
-pos = target = startAt;
-layout();
-stage.focus({ preventScroll: true });
+(async function start() {
+    let pin = "";
+    try { pin = sessionStorage.getItem("sheetsEditorPin") || ""; } catch (e) {}
+    if (pin) {
+        auth = { pin, name: "" };
+        $("panel").innerHTML = `<section class="card"><div class="loading"><div class="spinner"></div>Signing in...</div></section>`;
+        try {
+            const j = await api("login");
+            auth.name = j.name;
+            showWho();
+            route();
+            return;
+        } catch (e) {
+            auth = { pin: "", name: "" };
+            $("panel").innerHTML = "";
+        }
+    }
+    showSignIn();
+})();
 </script>
 </body>
 </html>
