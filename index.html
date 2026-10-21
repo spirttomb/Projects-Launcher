@@ -11,7 +11,6 @@
         @font-face {
             font-family: 'Apercu Regular Pro';
             src: url('apercu_regular_pro.otf') format('opentype'),
-            url('https://spirttomb.github.io/Checklist-Tracker/apercu_regular_pro.otf') format('opentype');
             font-weight: normal;
             font-style: normal;
             font-display: swap;
@@ -321,6 +320,54 @@
         body.mode-editor .ed { display: block; }
         body.mode-editor { background: var(--canvas); color: var(--ink); }
         .ed .signin .back-link { display: block; margin: 0.9rem auto 0; }
+
+        /* ---------- Import from system ---------- */
+        .ed .sheet.wide { max-width: 760px; }
+        .ed .sheet-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.1rem 1.3rem; border-bottom: 1px solid var(--line); position: sticky; top: 0; background: #fff; z-index: 2; }
+        .ed .sheet-head h3 { font-size: 1.15rem; font-weight: 800; color: var(--navy-900); }
+        .ed .sheet-close { width: 36px; height: 36px; border-radius: 50%; border: none; background: var(--canvas); cursor: pointer; color: var(--navy-900); display: grid; place-items: center; }
+        .ed .sheet-close:hover { background: var(--line-strong); }
+        .ed .sheet-foot { display: flex; gap: 0.5rem; align-items: center; justify-content: flex-end; flex-wrap: wrap; padding: 0.9rem 1.3rem; border-top: 1px solid var(--line); position: sticky; bottom: 0; background: #fff; }
+        .ed .sheet-foot .grow { flex: 1; min-width: 10rem; font-size: 0.86rem; font-weight: 700; color: var(--muted); }
+        .ed .sheet-foot .grow.err { color: #b91c1c; }
+        .ed .imp-paste { width: 100%; min-height: 15rem; resize: vertical; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.85rem; line-height: 1.45; }
+        .ed .imp-rules { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 0.4rem; margin: 0.8rem 0 0; }
+        .ed .imp-rules div { background: var(--tint); border-radius: 10px; padding: 0.5rem 0.7rem; font-size: 0.84rem; color: var(--muted); }
+        .ed .imp-rules b { color: var(--navy-900); }
+        .ed .imp-file { display: inline-flex; align-items: center; gap: 0.4rem; cursor: pointer; }
+        .ed .imp-file input { display: none; }
+        .ed .imp-pills { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-bottom: 0.4rem; }
+        .ed .imp-pill { border-radius: 999px; padding: 0.35rem 0.75rem; font-weight: 800; font-size: 0.82rem; background: var(--canvas); color: var(--navy-900); }
+        .ed .imp-pill.new { background: #dcfce7; color: #166534; }
+        .ed .imp-pill.del { background: #fee2e2; color: #b91c1c; }
+        .ed .imp-pill.upd { background: #dbeafe; color: #1e40af; }
+        .ed .imp-sec { margin-top: 1.3rem; }
+        .ed .imp-sec h4 { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--navy-800); margin-bottom: 0.25rem; }
+        .ed .imp-sec > p { color: var(--muted); font-size: 0.84rem; margin-bottom: 0.55rem; }
+        .ed .imp-list { border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+        .ed .imp-row { display: flex; align-items: center; gap: 0.6rem; padding: 0.6rem 0.8rem; border-top: 1px solid var(--line); flex-wrap: wrap; }
+        .ed .imp-row:first-child { border-top: none; }
+        .ed .imp-row.need { background: #fffbeb; }
+        .ed .imp-row.off { opacity: 0.55; }
+        .ed .imp-name { font-weight: 800; color: var(--navy-900); min-width: 7.5rem; }
+        .ed .imp-src { color: var(--muted); font-size: 0.8rem; flex: 1; min-width: 9rem; }
+        .ed .imp-row .field.slim { width: 9.5rem; padding: 0.45rem 0.6rem; font-size: 0.92rem; font-weight: 700; }
+        .ed .imp-row .sel.slim { width: auto; max-width: 13rem; padding: 0.45rem 0.4rem; font-size: 0.88rem; }
+        .ed .imp-pin { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-weight: 700; color: var(--muted); font-size: 0.88rem; }
+        .ed .imp-chg { font-size: 0.84rem; color: var(--ink); flex: 1; min-width: 12rem; }
+        .ed .imp-chg s { color: var(--muted); }
+        .ed .imp-row .seg button { padding: 0.35rem 0.7rem; }
+        .ed .imp-check { display: flex; align-items: center; gap: 0.4rem; font-weight: 700; font-size: 0.86rem; color: var(--navy-900); cursor: pointer; margin-left: auto; }
+        .ed .imp-check input { width: 1.05rem; height: 1.05rem; accent-color: #b91c1c; }
+        .ed .imp-warn { margin-top: 1rem; padding: 0.7rem 0.85rem; border-radius: 12px; background: #fff7ed; color: #9a3412; font-size: 0.86rem; line-height: 1.45; }
+        .ed .imp-warn b { color: #7c2d12; }
+        .ed .imp-more { width: 100%; text-align: left; padding: 0.6rem 0.8rem; border: none; background: var(--tint); color: var(--navy-700); font-weight: 700; cursor: pointer; font-size: 0.86rem; border-top: 1px solid var(--line); }
+        @media (max-width: 640px) {
+            .ed #importModal { align-items: flex-end; }
+            .ed .sheet.wide { width: 100%; border-radius: 22px 22px 0 0; max-height: 94vh; }
+            .ed .imp-row .field.slim { width: 100%; }
+            .ed .imp-src { flex-basis: 100%; }
+        }
 
         /* ================= SHEETS EDITOR ================= */
         body.mode-editor {
@@ -679,6 +726,18 @@
         <div class="save-msg" id="saveMsg"></div>
         <button type="button" class="btn-secondary" id="discardBtn" onclick="discardChanges()">Discard</button>
         <button type="button" class="btn-primary" id="saveBtn" onclick="saveCurrent()">Save changes</button>
+    </div>
+</div>
+
+<!-- Import from system -->
+<div class="modal-overlay" id="importModal" onclick="if (event.target === this) closeImport()">
+    <div class="sheet wide">
+        <div class="sheet-head">
+            <h3 id="impTitle">Import from system</h3>
+            <button type="button" class="sheet-close" onclick="closeImport()" aria-label="Close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+        </div>
+        <div class="sheet-body" id="impBody"></div>
+        <div class="sheet-foot" id="impFoot"></div>
     </div>
 </div>
 
@@ -1313,6 +1372,7 @@ const IC = {
     x: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
     grip: '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.6"/><circle cx="15" cy="6" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="18" r="1.6"/><circle cx="15" cy="18" r="1.6"/></svg>',
     eye: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
+    download: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5"/><path d="M4 19h16"/></svg>',
     sort: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h9M4 12h6M4 18h3"/><path d="M17 4v16M14 17l3 3 3-3"/></svg>'
 };
 
@@ -1388,6 +1448,7 @@ async function signIn() {
     }
 }
 $("siPin").addEventListener("keydown", e => { if (e.key === "Enter") signIn(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape" && $("importModal").classList.contains("active")) closeImport(); });
 
 function showWho() {
     const w = $("who");
@@ -1791,6 +1852,7 @@ function renderStaff() {
                 <div class="search-field">${IC.search}<input class="field" id="staffSearch" placeholder="Search by name or PIN" value="${esc(S.search)}" oninput="cur.model.search=this.value; renderStaffList()"></div>
                 <button type="button" class="btn-secondary ${S.showPins ? "on" : ""}" onclick="cur.model.showPins=!cur.model.showPins; renderStaff()">${IC.eye} PINs</button>
                 <button type="button" class="btn-secondary" onclick="sortStaff()" title="Sort the sheet A to Z">${IC.sort} A–Z</button>
+                <button type="button" class="btn-secondary" onclick="openImport()">${IC.download} Import from system</button>
                 <button type="button" class="btn-dark" onclick="addPerson()">${IC.plus} Add person</button>
             </div>
             <div class="people" id="staffList"></div>
@@ -1880,6 +1942,392 @@ function undoPerson(uid) {
     const el = $("p-" + uid);
     if (el) el.outerHTML = personHtml(r, staffErrors(cur.model));
     touch();
+}
+
+// =====================================================================
+// IMPORT FROM SYSTEM
+// Paste (or open a .csv/.txt of) the clock-in PIN export:
+//   Full Name | Employee Group | Clock-In PIN      e.g.  Scott, William (Will)  Cashier  771015
+// People already on the list keep their row (and ratings) and name; their PIN
+// and role are updated. New people are added at the bottom. People missing from
+// the export are removed.
+// =====================================================================
+const IMPORT_GROUPS = {
+    "Team Leader": { role: "leader" },
+    "Manager":     { role: "leader" },
+    "Team Member": { role: "member", house: "boh" },
+    "Cashier":     { role: "member", house: "foh" }
+};
+const PIN_DIGITS = 4; // the app PIN is the first 4 digits of the clock-in PIN
+
+let imp = null;
+
+function normName(s) { return String(s || "").toLowerCase().replace(/[^a-z\s]/g, " ").replace(/\s+/g, " ").trim(); }
+function capFirst(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
+
+function splitDelimited(line) {
+    // A CSV or tab-separated line becomes "Last, First Group PIN"
+    const sep = line.includes("\t") ? "\t" : ",";
+    const out = [];
+    let cur = "", q = false;
+    for (let i = 0; i < line.length; i++) {
+        const ch = line[i];
+        if (ch === '"') { if (q && line[i + 1] === '"') { cur += '"'; i++; } else q = !q; }
+        else if (ch === sep && !q) { out.push(cur); cur = ""; }
+        else cur += ch;
+    }
+    out.push(cur);
+    return out.map(x => x.trim()).filter(Boolean).join(" ");
+}
+
+function parseExport(text) {
+    const groups = Object.keys(IMPORT_GROUPS).sort((a, b) => b.length - a.length).map(g => g.replace(/\s+/g, "\\s+")).join("|");
+    let t = String(text || "").replace(/\r/g, "");
+    t = t.split("\n").map(l => (l.includes('"') || l.includes("\t")) ? splitDelimited(l) : l).join("\n");
+    t = t.replace(/Full\s+Name\s+Employee\s+Group\s+Clock-?\s*In\s+PIN/gi, "\n");
+    const re = new RegExp("([A-Za-z\\u00C0-\\u024F][^,\\d\\n]*?),\\s*([^\\d\\n]+?)\\s+(" + groups + ")\\s+(\\d{4,})", "gi");
+    const entries = [], unreadable = [];
+    t.split("\n").forEach(line => {
+        const l = line.trim();
+        if (!l) return;
+        let m, any = false;
+        re.lastIndex = 0;
+        while ((m = re.exec(l))) {
+            any = true;
+            const last = m[1].trim().replace(/\s+/g, " ");
+            let first = m[2].trim().replace(/\s+/g, " ");
+            let nick = "";
+            const pm = first.match(/\(([^)]*)\)/);
+            if (pm) {
+                nick = pm[1].split(/\s+or\s+|\/|,/i)[0].trim();
+                first = first.replace(/\([^)]*\)/, "").trim();
+            }
+            const groupKey = Object.keys(IMPORT_GROUPS).find(g => g.toLowerCase() === m[3].replace(/\s+/g, " ").toLowerCase());
+            entries.push({ idx: entries.length, last, first, nick: capFirst(nick), group: groupKey, fullPin: m[4], pin: m[4].slice(0, PIN_DIGITS) });
+        }
+        if (!any) unreadable.push(l);
+    });
+    // De-duplicate exact repeats (an export pasted twice)
+    const seen = new Set();
+    const uniq = entries.filter(e => { const k = e.last + "|" + e.first + "|" + e.fullPin; if (seen.has(k)) return false; seen.add(k); return true; });
+    uniq.forEach((e, i) => e.idx = i);
+    return { entries: uniq, unreadable };
+}
+
+function firstNames(e) {
+    const set = new Set();
+    [e.nick, e.first, e.first.split(" ")[0]].forEach(n => { const k = normName(n); if (k) set.add(k); });
+    return set;
+}
+function lastInitial(e) { return (e.last.match(/[A-Za-z]/) || [""])[0].toUpperCase(); }
+function displayFor(e, letters) {
+    const lastLetters = e.last.replace(/[^A-Za-z]/g, "");
+    return `${e.nick || e.first.split(" ")[0]} ${capFirst(lastLetters.slice(0, letters || 1).toLowerCase())}`;
+}
+
+function matchScore(row, e, firstCount) {
+    const name = normName(row.cells[0]);
+    if (!name) return 0;
+    const toks = name.split(" ");
+    const fns = firstNames(e);
+    let score = 0;
+    const fullFirsts = [...fns];
+    const lastN = normName(e.last);
+    if (fullFirsts.some(f => name === f + " " + lastN || name === f + " " + lastN.split(" ")[0])) score = 4;
+    else if (fns.has(toks[0]) || fullFirsts.some(f => name.startsWith(f + " ") || name === f)) {
+        const f = fullFirsts.find(f => name === f || name.startsWith(f + " ")) || toks[0];
+        const after = name.slice(f.length).trim();
+        if (!after) score = firstCount[f] === 1 ? 3 : 2;
+        else if (after[0] === lastInitial(e).toLowerCase()) score = 3;
+        else score = 1;
+    }
+    if (score && String(row.cells[1]).trim() === e.pin) score += 2;
+    else if (!score && String(row.cells[1]).trim() === e.pin) score = 1;
+    return score;
+}
+
+function autoMatch(rows, entries) {
+    const firstCount = {};
+    entries.forEach(e => firstNames(e).forEach(f => firstCount[f] = (firstCount[f] || 0) + 1));
+    const pairs = [];
+    rows.forEach(r => entries.forEach(e => { const sc = matchScore(r, e, firstCount); if (sc >= 3) pairs.push({ r, e, sc }); }));
+    pairs.sort((a, b) => b.sc - a.sc);
+    const link = {}, usedRows = new Set();
+    pairs.forEach(({ r, e }) => {
+        if (link[e.idx] !== undefined || usedRows.has(r.uid)) return;
+        link[e.idx] = r.uid;
+        usedRows.add(r.uid);
+    });
+    return link;
+}
+
+function openImport() {
+    imp = { step: "paste", text: imp && imp.text || "" };
+    renderImport();
+    $("importModal").classList.add("active");
+    setTimeout(() => { const t = $("impText"); if (t) t.focus(); }, 60);
+}
+function closeImport() { $("importModal").classList.remove("active"); }
+
+function renderImport() {
+    if (imp.step === "paste") return renderImportPaste();
+    renderImportReview();
+}
+
+function renderImportPaste() {
+    $("impTitle").textContent = "Import from system";
+    $("impBody").innerHTML = `
+        <p class="note" style="margin-bottom:0.7rem">Copy the clock-in PIN list from your system and paste it here, headers and all. You'll see every change before anything happens.</p>
+        <textarea class="field imp-paste" id="impText" placeholder="Full Name   Employee Group   Clock-In PIN&#10;Adams, Chace   Cashier   389699&#10;Scott, William (Will)   Cashier   771015" oninput="imp.text=this.value">${esc(imp.text)}</textarea>
+        <div class="imp-rules">
+            <div><b>Names</b> become First + last initial, using the nickname in ( ) if there is one</div>
+            <div><b>PIN</b> is the first ${PIN_DIGITS} digits of the clock-in PIN</div>
+            <div><b>Cashier</b> FOH · <b>Team Member</b> BOH</div>
+            <div><b>Team Leader</b> and <b>Manager</b> are leaders</div>
+        </div>
+        <p class="note" style="margin-top:0.8rem">Ratings stay with each person. Names of people already on the list aren't changed.</p>`;
+    $("impFoot").innerHTML = `
+        <label class="btn-secondary imp-file">${IC.download} Open a .csv or .txt<input type="file" accept=".csv,.txt,text/csv,text/plain" onchange="importFile(this)"></label>
+        <span class="grow" id="impMsg"></span>
+        <button type="button" class="btn-primary" onclick="readImport()">Review changes</button>`;
+}
+
+function importFile(input) {
+    const f = input.files && input.files[0];
+    if (!f) return;
+    if (/\.xlsx?$/i.test(f.name)) { $("impMsg").textContent = "Excel files can't be read here. Save it as CSV, or copy and paste the list."; $("impMsg").className = "grow err"; return; }
+    const rd = new FileReader();
+    rd.onload = () => { imp.text = String(rd.result || ""); $("impText").value = imp.text; readImport(); };
+    rd.readAsText(f);
+}
+
+function readImport() {
+    const { entries, unreadable } = parseExport(imp.text);
+    if (!entries.length) {
+        $("impMsg").textContent = "Couldn't find anyone in that. It should look like: Adams, Chace   Cashier   389699";
+        $("impMsg").className = "grow err";
+        return;
+    }
+    const S = cur.model;
+    const rows = liveRows(S);
+    imp.step = "review";
+    imp.entries = entries;
+    imp.unreadable = unreadable;
+    imp.link = autoMatch(rows, entries);         // entry idx -> row uid ("" = new person)
+    imp.auto = Object.assign({}, imp.link);
+    imp.keep = {};                               // row uid -> true = keep even though not in export
+    imp.house = {};                              // entry idx -> "foh" | "boh" for new leaders
+    imp.names = {};                              // entry idx -> name for new people
+    imp.showAll = false;
+    assignNewNames();
+    renderImport();
+}
+
+function linkedRow(e) { const u = imp.link[e.idx]; return u ? cur.model.rows.find(r => r.uid === u) : null; }
+
+// New people get "First L"; if that name is taken, more letters of the last name are used
+function assignNewNames() {
+    const S = cur.model;
+    const taken = new Set();
+    const linked = new Set(Object.values(imp.link).filter(Boolean));
+    liveRows(S).forEach(r => { if (linked.has(r.uid) || !importRemoves(r)) taken.add(normName(r.cells[0])); });
+    imp.entries.forEach(e => { if (!linkedRow(e) && imp.names[e.idx] && imp.names[e.idx].custom) taken.add(normName(imp.names[e.idx].name)); });
+    const fresh = imp.entries.filter(e => !linkedRow(e) && !(imp.names[e.idx] && imp.names[e.idx].custom));
+    const base = {};
+    fresh.forEach(e => { const k = normName(displayFor(e, 1)); base[k] = (base[k] || 0) + 1; });
+    fresh.forEach(e => {
+        const maxL = Math.max(1, e.last.replace(/[^A-Za-z]/g, "").length);
+        const clash = n => {
+            const k = normName(displayFor(e, n));
+            return taken.has(k) || fresh.some(o => o !== e && normName(displayFor(o, n)) === k);
+        };
+        let n = 1;
+        while (n < maxL && clash(n)) n++;
+        const name = displayFor(e, n);
+        taken.add(normName(name));
+        imp.names[e.idx] = { name, custom: false };
+    });
+}
+
+function importRemoves(r) {
+    // Existing person not in the export (and not kept)
+    if (Object.values(imp.link).includes(r.uid)) return false;
+    if (isMe(r)) return false;
+    return !imp.keep[r.uid];
+}
+function isMe(r) { return normName(r.cells[0]) === normName(auth.name); }
+
+function roleFor(e) { return IMPORT_GROUPS[e.group].role; }
+
+function changesFor(r, e) {
+    const out = [];
+    const oldPin = String(r.cells[1]).trim();
+    if (oldPin !== e.pin) out.push(`PIN ${oldPin ? `<s>${"•".repeat(Math.min(oldPin.length, 6))}</s> → ` : ""}new`);
+    const oldRole = String(r.cells[2]).trim().toLowerCase();
+    const custom = oldRole && oldRole !== "leader" && oldRole !== "member";
+    const newRole = roleFor(e);
+    if (!custom && (oldRole || "member") !== newRole) out.push(`Role <s>${oldRole === "leader" ? "Leader" : "Team Member"}</s> → ${newRole === "leader" ? "Leader" : "Team Member"}`);
+    const oldHouse = String(r.cells[3]).trim().toLowerCase() || "foh";
+    const g = IMPORT_GROUPS[e.group];
+    if (newRole !== "leader" && g.house && oldHouse !== g.house) out.push(`House <s>${houseLabel(oldHouse)}</s> → ${houseLabel(g.house)}`);
+    return out;
+}
+function houseLabel(h) { return h === "boh" ? "BOH" : "FOH"; }
+
+function renderImportReview() {
+    const S = cur.model;
+    const rows = liveRows(S);
+    const matched = imp.entries.filter(e => linkedRow(e));
+    const added = imp.entries.filter(e => !linkedRow(e));
+    const missing = rows.filter(r => !Object.values(imp.link).includes(r.uid));
+    const removing = missing.filter(r => importRemoves(r));
+    const changed = matched.filter(e => changesFor(linkedRow(e), e).length);
+    const newLeaders = added.filter(e => roleFor(e) === "leader");
+    const unlinkedRows = r => !Object.values(imp.link).includes(r.uid);
+
+    // PIN clashes after import
+    const finalPins = {};
+    imp.entries.forEach(e => { const n = linkedRow(e) ? linkedRow(e).cells[0] : imp.names[e.idx].name; (finalPins[e.pin] = finalPins[e.pin] || []).push(n); });
+    missing.filter(r => !importRemoves(r)).forEach(r => { const p = String(r.cells[1]).trim(); if (p) (finalPins[p] = finalPins[p] || []).push(r.cells[0]); });
+    const clashes = Object.entries(finalPins).filter(([, v]) => v.length > 1);
+
+    const groupTag = e => `<span class="imp-src">${esc(e.last)}, ${esc(e.first)}${e.nick ? ` (${esc(e.nick)})` : ""} · ${esc(e.group)}</span>`;
+    const pinHtml = e => `<span class="imp-pin">${esc(e.pin)}</span>`;
+
+    $("impTitle").textContent = "Review the import";
+    $("impBody").innerHTML = `
+        <div class="imp-pills">
+            <span class="imp-pill">${imp.entries.length} in the export</span>
+            <span class="imp-pill new">${added.length} new</span>
+            <span class="imp-pill del">${removing.length} removed</span>
+            <span class="imp-pill upd">${changed.length} updated</span>
+        </div>
+
+        ${newLeaders.length ? `<div class="imp-sec">
+            <h4>New leaders: front or back?</h4>
+            <p>Pick where each new leader works. Leaders already on the list keep their setting.</p>
+            <div class="imp-list">${newLeaders.map(e => `
+                <div class="imp-row ${imp.house[e.idx] ? "" : "need"}">
+                    <span class="imp-name">${esc(imp.names[e.idx].name)}</span>${groupTag(e)}
+                    <div class="seg">
+                        <button type="button" class="${imp.house[e.idx] === "foh" ? "on" : ""}" onclick="imp.house[${e.idx}]='foh'; renderImport()">FOH</button>
+                        <button type="button" class="${imp.house[e.idx] === "boh" ? "on" : ""}" onclick="imp.house[${e.idx}]='boh'; renderImport()">BOH</button>
+                    </div>
+                </div>`).join("")}</div>
+        </div>` : ""}
+
+        <div class="imp-sec">
+            <h4>New people (${added.length})</h4>
+            <p>Added at the bottom of the list. If someone is already on the list under a different name, pick them so their ratings carry over.</p>
+            ${added.length ? `<div class="imp-list">${added.map(e => `
+                <div class="imp-row">
+                    <input class="field slim" value="${esc(imp.names[e.idx].name)}" aria-label="Name" oninput="imp.names[${e.idx}]={ name: this.value, custom: true }; impFootMsg()">
+                    ${groupTag(e)}${pinHtml(e)}
+                    <select class="sel slim" onchange="impLink(${e.idx}, this.value)">
+                        <option value="">New person</option>
+                        ${rows.filter(unlinkedRows).map(r => `<option value="${r.uid}">Same as ${esc(r.cells[0])}</option>`).join("")}
+                    </select>
+                </div>`).join("")}</div>` : `<p>Nobody new.</p>`}
+        </div>
+
+        <div class="imp-sec">
+            <h4>Not in the export (${missing.length})</h4>
+            <p>These people will be removed, along with their ratings. Uncheck anyone you want to keep.</p>
+            ${missing.length ? `<div class="imp-list">${missing.map(r => `
+                <div class="imp-row ${importRemoves(r) ? "" : "off"}">
+                    <span class="imp-name">${esc(r.cells[0] || "No name")}</span>
+                    ${isMe(r) ? `<span class="imp-src">That's you, so you're kept</span>` : `
+                    <select class="sel slim" onchange="impLinkRow('${r.uid}', this.value)" aria-label="Match to someone in the export">
+                        <option value="">Same person as…</option>
+                        ${added.map(e => `<option value="${e.idx}">${esc(e.first)}${e.nick ? ` (${esc(e.nick)})` : ""} ${esc(e.last)}</option>`).join("")}
+                    </select>
+                    <label class="imp-check"><input type="checkbox" ${importRemoves(r) ? "checked" : ""} onchange="imp.keep['${r.uid}']=!this.checked; renderImport()"> Remove</label>`}
+                </div>`).join("")}</div>` : `<p>Everyone on the list is in the export.</p>`}
+        </div>
+
+        <div class="imp-sec">
+            <h4>Updates (${changed.length})</h4>
+            <p>Same row, name and ratings. Only these details change.</p>
+            ${matched.length ? `<div class="imp-list">${(imp.showAll ? matched : changed).map(e => {
+                const r = linkedRow(e), ch = changesFor(r, e);
+                const wasAuto = imp.auto[e.idx] === r.uid;
+                return `<div class="imp-row">
+                    <span class="imp-name">${esc(r.cells[0])}</span>
+                    <span class="imp-chg">${ch.length ? ch.join(" · ") : "No changes"}</span>
+                    ${wasAuto ? "" : `<span class="tag edit">Matched by you</span>`}
+                    <button type="button" class="link-btn" onclick="impLink(${e.idx}, '')" title="Not the same person">Unmatch</button>
+                </div>`;
+            }).join("") || `<div class="imp-row"><span class="imp-chg">Nobody's details changed.</span></div>`}
+            ${matched.length > changed.length ? `<button type="button" class="imp-more" onclick="imp.showAll=!imp.showAll; renderImport()">${imp.showAll ? "Show only people with changes" : `Show all ${matched.length} matched people`}</button>` : ""}
+            </div>` : `<p>Nobody on the list matched the export.</p>`}
+        </div>
+
+        ${clashes.length ? `<div class="imp-warn"><b>Same PIN:</b> ${clashes.map(([p, n]) => `${n.map(esc).join(" and ")} (${esc(p)})`).join("; ")}.
+            The first ${PIN_DIGITS} digits match, so the checklist can't tell them apart. After importing, give one of them a different PIN before saving.</div>` : ""}
+        ${imp.unreadable.length ? `<div class="imp-warn"><b>Skipped ${imp.unreadable.length} line${imp.unreadable.length === 1 ? "" : "s"}</b> that didn't look like a person:<br>${imp.unreadable.slice(0, 6).map(l => esc(l.length > 80 ? l.slice(0, 80) + "…" : l)).join("<br>")}${imp.unreadable.length > 6 ? "<br>…" : ""}</div>` : ""}`;
+    $("impFoot").innerHTML = `
+        <button type="button" class="btn-secondary" onclick="imp.step='paste'; renderImport()">Back</button>
+        <span class="grow" id="impMsg"></span>
+        <button type="button" class="btn-primary" onclick="applyImport()">Apply to staff list</button>`;
+    impFootMsg();
+}
+
+function impFootMsg() {
+    const m = $("impMsg");
+    if (!m) return;
+    const need = imp.entries.filter(e => !linkedRow(e) && roleFor(e) === "leader" && !imp.house[e.idx]).length;
+    const blank = imp.entries.filter(e => !linkedRow(e) && !imp.names[e.idx].name.trim()).length;
+    m.className = "grow" + (need || blank ? " err" : "");
+    m.textContent = need ? `Pick FOH or BOH for ${need} new leader${need === 1 ? "" : "s"}.` : blank ? "Every new person needs a name." : "Nothing is saved until you tap Save changes.";
+}
+
+function impLink(idx, uid) {
+    if (uid) Object.keys(imp.link).forEach(k => { if (imp.link[k] === uid) delete imp.link[k]; });
+    if (uid) imp.link[idx] = uid; else imp.link[idx] = "";
+    assignNewNames();
+    renderImport();
+}
+function impLinkRow(uid, idx) { if (idx !== "") impLink(+idx, uid); }
+
+function applyImport() {
+    impFootMsg();
+    if ($("impMsg").classList.contains("err")) return;
+    const S = cur.model;
+    const rows = liveRows(S);
+    let nAdd = 0, nDel = 0, nUpd = 0;
+    imp.entries.forEach(e => {
+        const r = linkedRow(e);
+        if (!r) return;
+        if (changesFor(r, e).length) nUpd++;
+        r.cells[1] = e.pin;
+        const oldRole = String(r.cells[2]).trim().toLowerCase();
+        const custom = oldRole && oldRole !== "leader" && oldRole !== "member";
+        const role = roleFor(e);
+        if (!custom) r.cells[2] = role;
+        const g = IMPORT_GROUPS[e.group];
+        if (role !== "leader" && g.house) r.cells[3] = g.house;   // leaders keep their house
+    });
+    rows.forEach(r => {
+        if (!importRemoves(r)) return;
+        nDel++;
+        if (r.isNew) S.rows = S.rows.filter(x => x !== r); else r.deleted = true;
+    });
+    imp.entries.forEach(e => {
+        if (linkedRow(e)) return;
+        const cells = Array.from({ length: S.width }, () => "");
+        cells[0] = imp.names[e.idx].name.trim();
+        cells[1] = e.pin;
+        cells[2] = roleFor(e);
+        cells[3] = roleFor(e) === "leader" ? imp.house[e.idx] : IMPORT_GROUPS[e.group].house;
+        S.rows.push({ uid: newUid(), cells, orig: "", isNew: true, deleted: false });
+        nAdd++;
+    });
+    S.open = null;
+    S.search = "";
+    closeImport();
+    renderStaff();
+    touch();
+    toast(`Imported: ${nAdd} added, ${nDel} removed, ${nUpd} updated. Tap Save changes to keep it.`, "success", 5000);
 }
 
 function sortStaff() {
@@ -2377,6 +2825,7 @@ function leaveEditor() {
     cur = null;
     setSaveBar(false);
     $("signinModal").classList.remove("active");
+    $("importModal").classList.remove("active");
     $("panel").innerHTML = "";
     if (auth.name || auth.pin) forgetAuth();
     sizes();
