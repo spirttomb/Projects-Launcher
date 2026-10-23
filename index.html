@@ -11,6 +11,7 @@
         @font-face {
             font-family: 'Apercu Regular Pro';
             src: url('apercu_regular_pro.otf') format('opentype'),
+            url('https://spirttomb.github.io/Lineup-Generator/apercu_regular_pro.otf') format('opentype');
             font-weight: normal;
             font-style: normal;
             font-display: swap;
@@ -336,6 +337,10 @@
         .ed .imp-rules b { color: var(--navy-900); }
         .ed .imp-file { display: inline-flex; align-items: center; gap: 0.4rem; cursor: pointer; }
         .ed .imp-file input { display: none; }
+        .ed .imp-toggle { display: flex; gap: 0.6rem; align-items: flex-start; margin: 0.8rem 0 0.2rem; padding: 0.7rem 0.85rem; border-radius: 12px; background: var(--tint); cursor: pointer; }
+        .ed .imp-toggle input { width: 1.1rem; height: 1.1rem; margin-top: 0.15rem; accent-color: #0f2a4a; flex-shrink: 0; }
+        .ed .imp-toggle b { color: var(--navy-900); font-size: 0.92rem; }
+        .ed .imp-toggle small { display: block; color: var(--muted); font-size: 0.82rem; margin-top: 0.1rem; }
         .ed .imp-pills { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-bottom: 0.4rem; }
         .ed .imp-pill { border-radius: 999px; padding: 0.35rem 0.75rem; font-weight: 800; font-size: 0.82rem; background: var(--canvas); color: var(--navy-900); }
         .ed .imp-pill.new { background: #dcfce7; color: #166534; }
@@ -412,6 +417,26 @@
         .ed .tile.staff { background: #fef3c7; color: #a16207; }
         .ed .tile.check { background: #dbeafe; color: #1d4ed8; }
         .ed .tile.rules { background: #ede9fe; color: #6d28d9; }
+        .ed .tile.cater { background: #fce7f3; color: #be185d; }
+        .ed .filterbar { display: flex; flex-wrap: wrap; gap: 0.5rem 0.6rem; align-items: center; padding: 0 1.3rem 0.9rem; }
+        .ed .filterbar .seg button { padding: 0.4rem 0.75rem; }
+        .ed .sort-label { display: inline-flex; align-items: center; gap: 0.45rem; font-size: 0.84rem; font-weight: 800; color: var(--muted); }
+        .ed .sort-label .sel { width: auto; padding: 0.45rem 0.5rem; font-size: 0.9rem; font-weight: 700; color: var(--navy-900); }
+        .ed .rate-pill { font-size: 0.74rem; font-weight: 800; padding: 0.2rem 0.5rem; border-radius: 7px; white-space: nowrap; background: var(--canvas); color: var(--muted); }
+        .ed .rate-pill.r1 { background: #fee2e2; color: #b91c1c; }
+        .ed .rate-pill.r2 { background: #ffedd5; color: #c2410c; }
+        .ed .rate-pill.r3 { background: #e2e8f0; color: #334155; }
+        .ed .rate-pill.r4 { background: #dbeafe; color: #1d4ed8; }
+        .ed .rate-pill.r5 { background: #dcfce7; color: #15803d; }
+        .ed .rate-pill.cat { background: #fce7f3; color: #be185d; }
+        .ed .cater-list { border-top: 1px solid var(--line); margin-top: 0.6rem; }
+        .ed .cater-row { display: flex; align-items: center; gap: 0.6rem; padding: 0.5rem 1.3rem; border-bottom: 1px solid var(--line); }
+        .ed .cater-name { flex: 1; min-width: 0; font-weight: 800; color: var(--navy-900); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .ed .rank { min-width: 30px; height: 30px; padding: 0 0.35rem; border-radius: 9px; background: var(--navy-900); color: var(--gold-hi); display: grid; place-items: center; font-weight: 800; font-size: 0.88rem; flex-shrink: 0; }
+        .ed .cater-line { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; margin-top: 0.45rem; font-weight: 700; color: var(--navy-900); font-size: 0.92rem; }
+        .ed .mbtn { width: 34px; height: 34px; border-radius: 9px; border: none; background: transparent; color: var(--muted); display: grid; place-items: center; cursor: pointer; }
+        .ed .mbtn:hover { background: var(--canvas); color: var(--navy-900); }
+        .ed .mbtn:disabled { opacity: 0.3; cursor: default; background: transparent; }
         .ed .home-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; align-items: start; }
         .ed .home-grid .card { margin-bottom: 0; }
         .ed .home-grid .wide { grid-column: 1 / -1; }
@@ -493,7 +518,7 @@
         .ed .chev { color: var(--muted); transition: transform 0.2s; }
         .ed .person.open .chev { transform: rotate(180deg); }
         .ed .p-form { padding: 0.4rem 1.3rem 1.2rem; background: var(--tint); }
-        .ed .p-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 0.75rem; }
+        .ed .p-grid { display: grid; grid-template-columns: 1.5fr 1fr 0.8fr; gap: 0.75rem; }
         .ed .p-row { display: flex; gap: 1.25rem; flex-wrap: wrap; margin-top: 0.9rem; }
         .ed .p-row > div { min-width: 0; }
         .ed .p-form .field, .ed .p-form .sel { background: #fff; }
@@ -590,6 +615,8 @@
             .ed .hero h1 { font-size: 1.55rem; }
             .ed .workspace { padding: 0 0.75rem 2rem; }
             .ed .card-head, .ed .toolbar, .ed .ck-tabs, .ed .ck-hint { padding-left: 1rem; padding-right: 1rem; }
+            .ed .filterbar { padding-left: 1rem; padding-right: 1rem; }
+            .ed .people.sorted .p-pin { display: none; }
             .ed .card-body { padding: 0.8rem 1rem 1.1rem; }
             .ed .p-head { padding: 0.7rem 1rem; }
             .ed .p-form { padding: 0.4rem 1rem 1.1rem; }
@@ -1344,6 +1371,18 @@ const SKILL_ALIASES = {
 // =====================================================================
 let uidN = 0;
 function newUid() { return "u" + (++uidN); }
+// Staff names are stored as "First Last (Nickname)". The editor shows "First Last"; the nickname has its own field.
+function splitName(s) {
+    const str = String(s == null ? "" : s);
+    const m = str.match(/\(([^)]*)\)/);
+    return { base: str.replace(/\([^)]*\)/g, " ").replace(/\s+/g, " ").trim(), nick: m ? m[1].trim() : "" };
+}
+function baseName(s) { return splitName(s).base; }
+function joinName(base, nick) {
+    base = String(base || "").replace(/[()]/g, "").replace(/\s+/g, " ").trim();
+    nick = String(nick || "").replace(/[()]/g, "").replace(/\s+/g, " ").trim();
+    return nick ? `${base} (${nick})` : base;
+}
 function initials(name) {
     const w = String(name || "").trim().split(/\s+/).filter(Boolean);
     if (!w.length) return "?";
@@ -1372,6 +1411,7 @@ const IC = {
     x: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
     grip: '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.6"/><circle cx="15" cy="6" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="18" r="1.6"/><circle cx="15" cy="18" r="1.6"/></svg>',
     eye: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
+    box: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l9-5 9 5v8l-9 5-9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg>',
     download: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5"/><path d="M4 19h16"/></svg>',
     sort: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h9M4 12h6M4 18h3"/><path d="M17 4v16M14 17l3 3 3-3"/></svg>'
 };
@@ -1379,7 +1419,7 @@ const IC = {
 // =====================================================================
 // API (Apps Script)
 // =====================================================================
-let auth = { pin: "", name: "" };
+let auth = { pin: "", name: "", owners: [] };
 
 class ApiError extends Error { constructor(msg, code) { super(msg); this.code = code || ""; } }
 
@@ -1433,6 +1473,7 @@ async function signIn() {
     try {
         const j = await api("login");
         auth.name = j.name;
+        auth.owners = Array.isArray(j.owners) ? j.owners : [];
         try { sessionStorage.setItem("sheetsEditorPin", pin); } catch (e) {}
         $("signinModal").classList.remove("active");
         $("siErr").textContent = "";
@@ -1452,7 +1493,7 @@ document.addEventListener("keydown", e => { if (e.key === "Escape" && $("importM
 
 function showWho() {
     const w = $("who");
-    w.innerHTML = `<span class="chip-avatar">${esc(initials(auth.name))}</span><span>${esc(auth.name)}</span>`;
+    w.innerHTML = `<span class="chip-avatar">${esc(initials(baseName(auth.name)))}</span><span>${esc(baseName(auth.name))}</span>`;
     w.classList.add("on");
     $("signOutBtn").style.display = "";
 }
@@ -1702,22 +1743,83 @@ function parseStaff(vals) {
         SKILLS.forEach((sk, i) => { skillCol[sk] = 4 + i; });
         width = Math.max(width, 4 + SKILLS.length);
     }
+    // Catering priority (after the ratings): the "Catering" column, added if the sheet doesn't have one yet.
+    // 1 = first choice, no upper limit. Without a header row it's column N.
+    let caterCol = -1;
+    if (hasHeader) {
+        for (let c = 4; c < origWidth; c++) if (/cater/i.test(header[c] || "")) { caterCol = c; break; }
+        if (caterCol < 0) caterCol = width++;
+    } else {
+        caterCol = 4 + SKILLS.length;
+        width = Math.max(width, caterCol + 1);
+    }
     const skillIdx = new Set(Object.values(skillCol));
     const extras = [];
-    for (let c = 4; c < origWidth; c++) if (!skillIdx.has(c)) extras.push({ idx: c, label: (header && (header[c] || "").trim()) || "Column " + colLetter(c) });
+    for (let c = 4; c < origWidth; c++) if (!skillIdx.has(c) && c !== caterCol) extras.push({ idx: c, label: (header && (header[c] || "").trim()) || "Column " + colLetter(c) });
     const rows = vals.slice(hasHeader ? 1 : 0).filter(r => r.some(x => x.trim())).map(r => {
         const cells = Array.from({ length: width }, (_, i) => (r[i] || "").trim());
         return { uid: newUid(), cells, orig: JSON.stringify(cells), isNew: false, deleted: false };
     });
-    return { hasHeader, header, origWidth, width, skillCol, extras, rows, open: null, search: "", showPins: false };
+    return { hasHeader, header, origWidth, width, skillCol, caterCol, extras, rows, open: null, search: "", showPins: false };
 }
 
 function liveRows(S) { return S.rows.filter(r => !r.deleted); }
 
+// ---------- Catering order ----------
+function caterRankOf(S, r) { const n = parseInt(r.cells[S.caterCol], 10); return n >= 1 ? n : null; }
+function caterList(S) { return liveRows(S).filter(r => caterRankOf(S, r)).sort((a, b) => caterRankOf(S, a) - caterRankOf(S, b)); }
+function setCaterOrder(list) {
+    const S = cur.model;
+    liveRows(S).forEach(r => { if (!list.includes(r) && r.cells[S.caterCol]) r.cells[S.caterCol] = ""; });
+    list.forEach((r, i) => { r.cells[S.caterCol] = String(i + 1); });
+}
+function caterMove(uid, d) {
+    const L = caterList(cur.model), i = L.findIndex(r => r.uid === uid), j = i + d;
+    if (i < 0 || j < 0 || j >= L.length) return;
+    [L[i], L[j]] = [L[j], L[i]];
+    setCaterOrder(L); renderStaff(); touch();
+}
+function caterRemove(uid) { setCaterOrder(caterList(cur.model).filter(r => r.uid !== uid)); renderStaff(); touch(); }
+function caterAdd(uid) {
+    if (!uid) return;
+    const L = caterList(cur.model), r = cur.model.rows.find(x => x.uid === uid);
+    if (!r || L.includes(r)) return;
+    L.push(r); setCaterOrder(L); renderStaff(); touch();
+    toast(`${baseName(r.cells[0]) || "They"} added to the catering order at #${L.length}.`, "success");
+}
+function caterCardHtml(S) {
+    const L = caterList(S);
+    const others = liveRows(S).filter(r => !L.includes(r) && r.cells[0].trim()).sort((a, b) => a.cells[0].trim().localeCompare(b.cells[0].trim()));
+    const up = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"/></svg>';
+    const down = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
+    return `<section class="card">
+        <div class="card-head">
+            <span class="tile cater">${IC.box}</span>
+            <div><div class="card-title">Catering order</div><div class="card-sub">Who handles caterings, first choice at the top. The Lineup Generator picks from this order.</div></div>
+            <span class="count-pill push">${L.length} ${L.length === 1 ? "person" : "people"}</span>
+        </div>
+        <div class="cater-list">${L.length ? L.map((r, i) => `
+            <div class="cater-row">
+                <span class="rank">${i + 1}</span>
+                <span class="cater-name">${esc(baseName(r.cells[0]) || "No name")}</span>
+                <button type="button" class="mbtn" onclick="caterMove('${r.uid}', -1)" ${i === 0 ? "disabled" : ""} aria-label="Move up">${up}</button>
+                <button type="button" class="mbtn" onclick="caterMove('${r.uid}', 1)" ${i === L.length - 1 ? "disabled" : ""} aria-label="Move down">${down}</button>
+                <button type="button" class="icon-x" onclick="caterRemove('${r.uid}')" title="Take off the catering order">${IC.x}</button>
+            </div>`).join("") : `<div class="empty-note" style="padding:1rem 1.3rem">Nobody yet. Add the people who handle caterings, in the order you'd pick them.</div>`}
+        </div>
+        <div class="card-body" style="padding-top:0.8rem">
+            <select class="sel" onchange="caterAdd(this.value)" aria-label="Add someone to the catering order">
+                <option value="">+ Add someone to the catering order…</option>
+                ${others.map(r => `<option value="${r.uid}">${esc(baseName(r.cells[0]))}</option>`).join("")}
+            </select>
+        </div>
+    </section>`;
+}
+
 function staffErrors(S) {
     const errs = {}, names = {}, pins = {};
     liveRows(S).forEach(r => {
-        const n = r.cells[0].trim(), p = r.cells[1].trim();
+        const n = baseName(r.cells[0]), p = r.cells[1].trim();
         if (!n) { errs[r.uid] = "Needs a name."; return; }
         const k = n.toLowerCase();
         if (names[k]) errs[r.uid] = `Another person is already named ${n}.`;
@@ -1728,8 +1830,14 @@ function staffErrors(S) {
     return errs;
 }
 
+// The owner's row: their signed-in name, or any of the owner names set in the script (nickname ignored)
+function isOwnerName(n) {
+    const b = baseName(n).toLowerCase();
+    if (!b) return false;
+    return b === baseName(auth.name).toLowerCase() || (auth.owners || []).some(o => baseName(o).toLowerCase() === b);
+}
 function ownPin(S) {
-    const me = liveRows(S).find(r => r.cells[0].trim().toLowerCase() === auth.name.toLowerCase());
+    const me = liveRows(S).find(r => isOwnerName(r.cells[0]));
     return me ? me.cells[1].trim() : null;
 }
 
@@ -1745,17 +1853,20 @@ function buildStaff(S) {
         for (let c = S.origWidth; c < S.width; c++) if (used(c)) maxUsed = c;
         cols = Array.from({ length: maxUsed + 1 }, (_, i) => i);
     }
-    const skillAt = c => Object.keys(S.skillCol).find(k => S.skillCol[k] === c) || "";
+    const skillAt = c => c === S.caterCol ? "Catering" : Object.keys(S.skillCol).find(k => S.skillCol[k] === c) || "";
+    // Catering ranks are saved as 1, 2, 3… in order (gaps from removed people close up)
+    const caterOrder = live.filter(r => caterRankOf(S, r)).sort((a, b) => caterRankOf(S, a) - caterRankOf(S, b));
+    const newRank = new Map(caterOrder.map((r, i) => [r.uid, String(i + 1)]));
     const rows = [];
     if (S.hasHeader) rows.push(cols.map(c => c < S.origWidth ? (S.header[c] || "") : skillAt(c)));
-    live.forEach(r => rows.push(cols.map(c => (r.cells[c] || "").trim())));
+    live.forEach(r => rows.push(cols.map(c => c === S.caterCol ? (newRank.get(r.uid) || "") : (r.cells[c] || "").trim())));
 
     let error = null, focus = null;
     const errs = staffErrors(S);
     const bad = live.find(r => errs[r.uid]);
     if (!live.length) error = "Keep at least one person on the list.";
     else if (bad) {
-        error = `${bad.cells[0].trim() || "Someone"}: ${errs[bad.uid]}`;
+        error = `${baseName(bad.cells[0]) || "Someone"}: ${errs[bad.uid]}`;
         focus = () => { S.open = bad.uid; renderStaff(); scrollToPerson(bad.uid); };
     } else if (ownPin(S) === null || ownPin(S) === "") {
         error = "You can't remove or rename yourself, or clear your own PIN. It would lock you out of the editor.";
@@ -1773,11 +1884,18 @@ function personHeadHtml(r, errs) {
     const S = cur.model;
     const n = r.cells[0].trim(), role = r.cells[2].trim().toLowerCase(), house = r.cells[3].trim().toLowerCase();
     const pin = r.cells[1].trim();
-    return `${`<span class="chip-avatar">${esc(initials(n))}</span>`}
-        <span class="p-name ${n ? "" : "empty"}">${esc(n || "No name yet")}</span>
+    const shown = baseName(n);
+    return `${`<span class="chip-avatar">${esc(initials(shown))}</span>`}
+        <span class="p-name ${n ? "" : "empty"}">${esc(shown || "No name yet")}</span>
         ${errs[r.uid] ? '<span class="tag bad">Fix</span>' : personStatus(r)}
         ${role === "leader" ? '<span class="tag leader">Leader</span>' : role && role !== "member" ? `<span class="tag leader">${esc(r.cells[2])}</span>` : ""}
         ${house === "boh" ? '<span class="tag boh">BOH</span>' : ""}
+        ${(() => {
+            const V = staffView();
+            if (V.sort.indexOf("skill:") === 0) { const sk = V.sort.slice(6), v = rowRating(r, sk); return `<span class="rate-pill r${v}" title="${esc(sk)} rating">${esc(sk)} ${v || "–"}</span>`; }
+            if (V.sort === "catering") { const k = caterList(S).indexOf(r) + 1; return k ? `<span class="rate-pill cat" title="Catering order">Catering #${k}</span>` : ""; }
+            return "";
+        })()}
         <span class="p-pin">${pin ? (S.showPins ? esc(pin) : "•".repeat(Math.min(pin.length, 6))) : "no PIN"}</span>
         ${IC.chevD}`;
 }
@@ -1798,7 +1916,8 @@ function personFormHtml(r, errs) {
     const customRole = role && role !== "leader" && role !== "member";
     return `<div class="p-form">
         <div class="p-grid">
-            <div><label class="lbl">Name</label><input class="field" value="${esc(r.cells[0])}" placeholder="First name and last initial" oninput="setCell('${r.uid}', 0, this.value)" data-first="1"></div>
+            <div><label class="lbl">Name</label><input class="field" value="${esc(splitName(r.cells[0]).base)}" placeholder="First and last name" oninput="setName('${r.uid}', this.value, null)" data-first="1"></div>
+            <div><label class="lbl">Nickname <span style="text-transform:none;letter-spacing:0;font-weight:600">(optional)</span></label><input class="field" value="${esc(splitName(r.cells[0]).nick)}" placeholder="What the Uniform Shop shows" oninput="setName('${r.uid}', null, this.value)"></div>
             <div><label class="lbl">PIN</label><input class="field" value="${esc(r.cells[1])}" inputmode="numeric" placeholder="4 digits" oninput="setCell('${r.uid}', 1, this.value.replace(/\\s/g, ''))">
                 ${pin && pin.length !== 4 ? `<div class="hint-line">Checklist sign-in uses 4-digit PINs.</div>` : ""}</div>
         </div>
@@ -1815,11 +1934,15 @@ function personFormHtml(r, errs) {
         </div>
         <div class="sub-title">Position ratings <span style="text-transform:none;letter-spacing:0;font-weight:600">· 1 needs work, 5 is an ace</span></div>
         <div class="ratings">${SKILLS.map(sk => rateRow(r, sk)).join("")}</div>
+        <div class="sub-title">Catering</div>
+        <div class="cater-line">${(() => { const rk = caterList(S).indexOf(r) + 1; return rk
+            ? `<span class="rank">${rk}</span><span>${rk === 1 ? "First choice" : "#" + rk} for caterings</span><button type="button" class="link-btn" onclick="caterRemove('${r.uid}'); cur.model.open='${r.uid}'; renderStaff()">Take off the list</button>`
+            : `<span>Not on the catering order</span><button type="button" class="link-btn" onclick="caterAdd('${r.uid}'); cur.model.open='${r.uid}'; renderStaff()">Add at the bottom</button>`; })()}</div>
         ${S.extras.length ? `<div class="sub-title">Other columns</div><div class="p-grid" style="margin-top:0.4rem">${S.extras.map(x =>
             `<div><label class="lbl">${esc(x.label)}</label><input class="field" value="${esc(r.cells[x.idx])}" oninput="setCell('${r.uid}', ${x.idx}, this.value)"></div>`).join("")}</div>` : ""}
         ${errs[r.uid] ? `<div class="err-line">${esc(errs[r.uid])}</div>` : ""}
         <div class="p-foot">
-            <button type="button" class="link-btn danger" onclick="removePerson('${r.uid}')">Remove ${esc(r.cells[0].trim() || "this person")}</button>
+            <button type="button" class="link-btn danger" onclick="removePerson('${r.uid}')">Remove ${esc(baseName(r.cells[0]) || "this person")}</button>
             ${r.isNew ? "" : JSON.stringify(r.cells) !== r.orig ? `<button type="button" class="link-btn" onclick="undoPerson('${r.uid}')">Undo changes to this person</button>` : ""}
         </div>
     </div>`;
@@ -1842,33 +1965,101 @@ function renderStaff() {
     const S = cur.model;
     const live = liveRows(S);
     const removed = S.rows.filter(r => r.deleted && !r.isNew).length;
-    $("panel").innerHTML = `
+    $("panel").innerHTML = caterCardHtml(S) + `
         <section class="card">
             <div class="card-head">
                 <div><div class="card-title">Staff list</div><div class="card-sub">${S.hasHeader ? "Ratings are matched by the column headers in the sheet" : "Ratings are in columns E–M"}</div></div>
-                <span class="count-pill push" id="staffCount">${live.length} ${live.length === 1 ? "person" : "people"}</span>
+                <span class="count-pill push" id="staffCount"></span>
             </div>
             <div class="toolbar">
                 <div class="search-field">${IC.search}<input class="field" id="staffSearch" placeholder="Search by name or PIN" value="${esc(S.search)}" oninput="cur.model.search=this.value; renderStaffList()"></div>
                 <button type="button" class="btn-secondary ${S.showPins ? "on" : ""}" onclick="cur.model.showPins=!cur.model.showPins; renderStaff()">${IC.eye} PINs</button>
-                <button type="button" class="btn-secondary" onclick="sortStaff()" title="Sort the sheet A to Z">${IC.sort} A–Z</button>
+                <button type="button" class="btn-secondary" onclick="sortStaff()" title="Reorder the rows in the sheet A to Z (saved with Save changes)">${IC.sort} Reorder sheet A–Z</button>
                 <button type="button" class="btn-secondary" onclick="openImport()">${IC.download} Import from system</button>
                 <button type="button" class="btn-dark" onclick="addPerson()">${IC.plus} Add person</button>
             </div>
+            <div class="filterbar" id="staffFilters"></div>
             <div class="people" id="staffList"></div>
             ${removed ? `<div class="card-body" style="padding-top:0.8rem"><span class="note">${removed} ${removed === 1 ? "person" : "people"} will be removed when you save.</span>
                 <button type="button" class="link-btn" onclick="cur.model.rows.forEach(r => r.deleted = false); renderStaff(); touch()">Bring them back</button></div>` : ""}
         </section>`;
+    renderStaffFilters();
     renderStaffList();
+}
+
+// ---------- Staff list view: filter and sort (only changes what you see, not the sheet) ----------
+let staffViewState = null;
+const STAFF_VIEW_DEFAULT = { house: "all", role: "all", sort: "sheet" };
+function staffView() {
+    if (!staffViewState) {
+        let saved = null;
+        try { saved = JSON.parse(localStorage.getItem("sheetsEditorStaffView")); } catch (e) {}
+        staffViewState = Object.assign({}, STAFF_VIEW_DEFAULT, saved || {});
+    }
+    return staffViewState;
+}
+function setStaffView(k, v) {
+    staffView()[k] = v;
+    try { localStorage.setItem("sheetsEditorStaffView", JSON.stringify(staffViewState)); } catch (e) {}
+    renderStaffFilters();
+    renderStaffList();
+}
+function resetStaffView() { staffViewState = Object.assign({}, STAFF_VIEW_DEFAULT); setStaffView("sort", "sheet"); }
+function isLeaderRow(r) { return /lead|manag|director|supervis|owner|operator/i.test(r.cells[2] || ""); }
+function rowHouse(r) { return (r.cells[3] || "").trim().toLowerCase() === "boh" ? "boh" : "foh"; }
+function rowRating(r, sk) { const v = (r.cells[cur.model.skillCol[sk]] || "").trim(); return /^[1-5]$/.test(v) ? +v : 0; }
+function passesFilters(r) {
+    const V = staffView();
+    if (V.house !== "all" && rowHouse(r) !== V.house) return false;
+    if (V.role === "leader" && !isLeaderRow(r)) return false;
+    if (V.role === "member" && isLeaderRow(r)) return false;
+    return true;
+}
+function sortedRows(list) {
+    const V = staffView(), S = cur.model;
+    const byName = (a, b) => a.cells[0].trim().localeCompare(b.cells[0].trim());
+    if (V.sort === "name") return list.slice().sort(byName);
+    if (V.sort === "catering") return list.slice().sort((a, b) => (caterRankOf(S, a) || 1e9) - (caterRankOf(S, b) || 1e9) || byName(a, b));
+    if (V.sort.indexOf("skill:") === 0) {
+        const sk = V.sort.slice(6);
+        // highest first; people not rated yet go last
+        return list.slice().sort((a, b) => (rowRating(b, sk) || -1) - (rowRating(a, sk) || -1) || byName(a, b));
+    }
+    return list;
+}
+function filtersOn() { const V = staffView(); return V.house !== "all" || V.role !== "all"; }
+
+function renderStaffFilters() {
+    const box = $("staffFilters");
+    if (!box) return;
+    const V = staffView();
+    const seg = (k, opts) => `<div class="seg">${opts.map(([v, l]) => `<button type="button" class="${V[k] === v ? "on" : ""}" onclick="setStaffView('${k}', '${v}')">${l}</button>`).join("")}</div>`;
+    box.innerHTML = `
+        ${seg("house", [["all", "All"], ["foh", "FOH"], ["boh", "BOH"]])}
+        ${seg("role", [["all", "Everyone"], ["leader", "Leaders"], ["member", "Team Members"]])}
+        <label class="sort-label">Sort
+            <select class="sel" onchange="setStaffView('sort', this.value)">
+                <option value="sheet" ${V.sort === "sheet" ? "selected" : ""}>Sheet order</option>
+                <option value="name" ${V.sort === "name" ? "selected" : ""}>Name A–Z</option>
+                <option value="catering" ${V.sort === "catering" ? "selected" : ""}>Catering order</option>
+                <optgroup label="Best at (5 to 1)">${SKILLS.map(sk => `<option value="skill:${esc(sk)}" ${V.sort === "skill:" + sk ? "selected" : ""}>${esc(sk)}</option>`).join("")}</optgroup>
+            </select>
+        </label>
+        ${filtersOn() || V.sort !== "sheet" ? `<button type="button" class="link-btn" onclick="resetStaffView()">Reset</button>` : ""}`;
 }
 
 function renderStaffList() {
     const S = cur.model;
     const q = S.search.trim().toLowerCase();
     const errs = staffErrors(S);
-    const list = liveRows(S).filter(r => r.isNew || r.uid === S.open || matchesSearch(r, q));
+    const live = liveRows(S);
+    const list = sortedRows(live.filter(r => r.isNew || r.uid === S.open || (matchesSearch(r, q) && passesFilters(r))));
     $("staffList").innerHTML = list.length ? list.map(r => personHtml(r, errs)).join("")
-        : `<div class="empty-note">${q ? "Nobody matches that search." : "Nobody on the list yet."}</div>`;
+        : `<div class="empty-note">${q || filtersOn() ? "Nobody matches." : "Nobody on the list yet."}</div>`;
+    const V = staffView();
+    $("staffList").classList.toggle("sorted", V.sort === "catering" || V.sort.indexOf("skill:") === 0);
+    const pill = $("staffCount");
+    if (pill) pill.textContent = list.length === live.length ? `${live.length} ${live.length === 1 ? "person" : "people"}` : `${list.length} of ${live.length} people`;
 }
 
 function refreshPersonHead(uid) {
@@ -1908,6 +2099,13 @@ function setCell(uid, col, val, rerender) {
     touch();
 }
 
+function setName(uid, base, nick) {
+    const r = cur.model.rows.find(x => x.uid === uid);
+    if (!r) return;
+    const cur0 = splitName(r.cells[0]);
+    setCell(uid, 0, joinName(base === null ? cur0.base : base, nick === null ? cur0.nick : nick));
+}
+
 function addPerson() {
     const S = cur.model;
     const r = { uid: newUid(), cells: Array.from({ length: S.width }, () => ""), orig: "", isNew: true, deleted: false };
@@ -1926,8 +2124,8 @@ function removePerson(uid) {
     const S = cur.model;
     const r = S.rows.find(x => x.uid === uid);
     if (!r) return;
-    const n = r.cells[0].trim();
-    if (n && n.toLowerCase() === auth.name.toLowerCase()) { toast("You can't remove yourself.", "error"); return; }
+    const n = baseName(r.cells[0]);
+    if (n && isOwnerName(r.cells[0])) { toast("You can't remove yourself.", "error"); return; }
     if (n && !confirm(`Remove ${n} from the staff list? They won't be able to sign in to the Checklist Tracker.`)) return;
     if (r.isNew) S.rows = S.rows.filter(x => x !== r); else r.deleted = true;
     S.open = null;
@@ -2002,6 +2200,7 @@ function parseExport(text) {
                 nick = pm[1].split(/\s+or\s+|\/|,/i)[0].trim();
                 first = first.replace(/\([^)]*\)/, "").trim();
             }
+            if (nick && nick.toLowerCase() === first.toLowerCase()) nick = "";   // "James (james)" has no real nickname
             const groupKey = Object.keys(IMPORT_GROUPS).find(g => g.toLowerCase() === m[3].replace(/\s+/g, " ").toLowerCase());
             entries.push({ idx: entries.length, last, first, nick: capFirst(nick), group: groupKey, fullPin: m[4], pin: m[4].slice(0, PIN_DIGITS) });
         }
@@ -2022,12 +2221,20 @@ function firstNames(e) {
 function lastInitial(e) { return (e.last.match(/[A-Za-z]/) || [""])[0].toUpperCase(); }
 function displayFor(e, letters) {
     const lastLetters = e.last.replace(/[^A-Za-z]/g, "");
-    return `${e.nick || e.first.split(" ")[0]} ${capFirst(lastLetters.slice(0, letters || 1).toLowerCase())}`;
+    // Full name as the system has it, nickname in brackets: "Ariana Jones (Ari)". A 2, 3… is added only if two people share a full name.
+    const base = `${e.first.replace(/\s+/g, " ").trim()} ${e.last.replace(/\s+/g, " ").trim()}` + (letters > 1 ? " " + letters : "");
+    void lastLetters;
+    return joinName(base, e.nick);
 }
 
 function matchScore(row, e, firstCount) {
-    const name = normName(row.cells[0]);
+    const parts = splitName(row.cells[0]);
+    const name = normName(parts.base);
     if (!name) return 0;
+    if (parts.nick && e.nick && normName(parts.nick) === normName(e.nick) && name.split(" ")[0] && firstNames(e).has(name.split(" ")[0])) {
+        const sc = 4 + (String(row.cells[1]).trim() === e.pin ? 2 : 0);
+        return sc;
+    }
     const toks = name.split(" ");
     const fns = firstNames(e);
     let score = 0;
@@ -2080,12 +2287,12 @@ function renderImportPaste() {
         <p class="note" style="margin-bottom:0.7rem">Copy the clock-in PIN list from your system and paste it here, headers and all. You'll see every change before anything happens.</p>
         <textarea class="field imp-paste" id="impText" placeholder="Full Name   Employee Group   Clock-In PIN&#10;Adams, Chace   Cashier   389699&#10;Scott, William (Will)   Cashier   771015" oninput="imp.text=this.value">${esc(imp.text)}</textarea>
         <div class="imp-rules">
-            <div><b>Names</b> become First + last initial, using the nickname in ( ) if there is one</div>
+            <div><b>Names</b> are the full first and last name, with the nickname in ( ), e.g. Ariana Jones (Ari)</div>
             <div><b>PIN</b> is the first ${PIN_DIGITS} digits of the clock-in PIN</div>
             <div><b>Cashier</b> FOH · <b>Team Member</b> BOH</div>
             <div><b>Team Leader</b> and <b>Manager</b> are leaders</div>
         </div>
-        <p class="note" style="margin-top:0.8rem">Ratings stay with each person. Names of people already on the list aren't changed.</p>`;
+        <p class="note" style="margin-top:0.8rem">Ratings stay with each person. People already on the list get their full names too (you can turn that off on the next screen).</p>`;
     $("impFoot").innerHTML = `
         <label class="btn-secondary imp-file">${IC.download} Open a .csv or .txt<input type="file" accept=".csv,.txt,text/csv,text/plain" onchange="importFile(this)"></label>
         <span class="grow" id="impMsg"></span>
@@ -2119,6 +2326,7 @@ function readImport() {
     imp.house = {};                              // entry idx -> "foh" | "boh" for new leaders
     imp.names = {};                              // entry idx -> name for new people
     imp.showAll = false;
+    imp.rename = true;                           // people already on the list get the system's name too
     assignNewNames();
     renderImport();
 }
@@ -2126,25 +2334,36 @@ function readImport() {
 function linkedRow(e) { const u = imp.link[e.idx]; return u ? cur.model.rows.find(r => r.uid === u) : null; }
 
 // New people get "First L"; if that name is taken, more letters of the last name are used
+// System names (First + last initial) for new people, and for people already on the list when
+// "use the system's names" is on. If a name is taken, more letters of the last name are used.
+function renamesRow(r) {
+    if (!imp.rename) return false;
+    if (!isMe(r)) return true;
+    // the owner: only when the new name is one the script accepts, so sign-in keeps working
+    const e = imp.entries.find(x => imp.link[x.idx] === r.uid);
+    return !!e && (auth.owners || []).some(o => baseName(o).toLowerCase() === baseName(displayFor(e, 1)).toLowerCase());
+}
 function assignNewNames() {
     const S = cur.model;
     const taken = new Set();
     const linked = new Set(Object.values(imp.link).filter(Boolean));
-    liveRows(S).forEach(r => { if (linked.has(r.uid) || !importRemoves(r)) taken.add(normName(r.cells[0])); });
-    imp.entries.forEach(e => { if (!linkedRow(e) && imp.names[e.idx] && imp.names[e.idx].custom) taken.add(normName(imp.names[e.idx].name)); });
-    const fresh = imp.entries.filter(e => !linkedRow(e) && !(imp.names[e.idx] && imp.names[e.idx].custom));
-    const base = {};
-    fresh.forEach(e => { const k = normName(displayFor(e, 1)); base[k] = (base[k] || 0) + 1; });
+    // names that stay as they are
+    liveRows(S).forEach(r => {
+        if (linked.has(r.uid) ? !renamesRow(r) : !importRemoves(r)) taken.add(normName(baseName(r.cells[0])));
+    });
+    imp.entries.forEach(e => { if (!linkedRow(e) && imp.names[e.idx] && imp.names[e.idx].custom) taken.add(normName(baseName(imp.names[e.idx].name))); });
+    const fresh = imp.entries.filter(e => {
+        const r = linkedRow(e);
+        if (r) return renamesRow(r);
+        return !(imp.names[e.idx] && imp.names[e.idx].custom);
+    });
     fresh.forEach(e => {
-        const maxL = Math.max(1, e.last.replace(/[^A-Za-z]/g, "").length);
-        const clash = n => {
-            const k = normName(displayFor(e, n));
-            return taken.has(k) || fresh.some(o => o !== e && normName(displayFor(o, n)) === k);
-        };
+        const key = n => normName(baseName(displayFor(e, n)));
+        const clash = n => taken.has(key(n)) || fresh.some(o => o !== e && normName(baseName(displayFor(o, n))) === key(n) && fresh.indexOf(o) < fresh.indexOf(e));
         let n = 1;
-        while (n < maxL && clash(n)) n++;
+        while (n < 50 && clash(n)) n++;
         const name = displayFor(e, n);
-        taken.add(normName(name));
+        taken.add(normName(baseName(name)));
         imp.names[e.idx] = { name, custom: false };
     });
 }
@@ -2155,12 +2374,13 @@ function importRemoves(r) {
     if (isMe(r)) return false;
     return !imp.keep[r.uid];
 }
-function isMe(r) { return normName(r.cells[0]) === normName(auth.name); }
+function isMe(r) { return isOwnerName(r.cells[0]); }
 
 function roleFor(e) { return IMPORT_GROUPS[e.group].role; }
 
 function changesFor(r, e) {
     const out = [];
+    if (renamesRow(r) && imp.names[e.idx] && r.cells[0].trim() !== imp.names[e.idx].name) out.push(`Name <s>${esc(r.cells[0].trim())}</s> → ${esc(imp.names[e.idx].name)}`);
     const oldPin = String(r.cells[1]).trim();
     if (oldPin !== e.pin) out.push(`PIN ${oldPin ? `<s>${"•".repeat(Math.min(oldPin.length, 6))}</s> → ` : ""}new`);
     const oldRole = String(r.cells[2]).trim().toLowerCase();
@@ -2187,8 +2407,8 @@ function renderImportReview() {
 
     // PIN clashes after import
     const finalPins = {};
-    imp.entries.forEach(e => { const n = linkedRow(e) ? linkedRow(e).cells[0] : imp.names[e.idx].name; (finalPins[e.pin] = finalPins[e.pin] || []).push(n); });
-    missing.filter(r => !importRemoves(r)).forEach(r => { const p = String(r.cells[1]).trim(); if (p) (finalPins[p] = finalPins[p] || []).push(r.cells[0]); });
+    imp.entries.forEach(e => { const n = baseName(linkedRow(e) ? linkedRow(e).cells[0] : imp.names[e.idx].name); (finalPins[e.pin] = finalPins[e.pin] || []).push(n); });
+    missing.filter(r => !importRemoves(r)).forEach(r => { const p = String(r.cells[1]).trim(); if (p) (finalPins[p] = finalPins[p] || []).push(baseName(r.cells[0])); });
     const clashes = Object.entries(finalPins).filter(([, v]) => v.length > 1);
 
     const groupTag = e => `<span class="imp-src">${esc(e.last)}, ${esc(e.first)}${e.nick ? ` (${esc(e.nick)})` : ""} · ${esc(e.group)}</span>`;
@@ -2202,6 +2422,8 @@ function renderImportReview() {
             <span class="imp-pill del">${removing.length} removed</span>
             <span class="imp-pill upd">${changed.length} updated</span>
         </div>
+        <label class="imp-toggle"><input type="checkbox" ${imp.rename ? "checked" : ""} onchange="imp.rename=this.checked; assignNewNames(); renderImport()">
+            <span><b>Use full names for people already on the list</b><small>First and last name with the nickname in ( ). Your own row changes only if the new name is listed as OWNER in the script.</small></span></label>
 
         ${newLeaders.length ? `<div class="imp-sec">
             <h4>New leaders: front or back?</h4>
@@ -2225,7 +2447,7 @@ function renderImportReview() {
                     ${groupTag(e)}${pinHtml(e)}
                     <select class="sel slim" onchange="impLink(${e.idx}, this.value)">
                         <option value="">New person</option>
-                        ${rows.filter(unlinkedRows).map(r => `<option value="${r.uid}">Same as ${esc(r.cells[0])}</option>`).join("")}
+                        ${rows.filter(unlinkedRows).map(r => `<option value="${r.uid}">Same as ${esc(baseName(r.cells[0]))}</option>`).join("")}
                     </select>
                 </div>`).join("")}</div>` : `<p>Nobody new.</p>`}
         </div>
@@ -2235,7 +2457,7 @@ function renderImportReview() {
             <p>These people will be removed, along with their ratings. Uncheck anyone you want to keep.</p>
             ${missing.length ? `<div class="imp-list">${missing.map(r => `
                 <div class="imp-row ${importRemoves(r) ? "" : "off"}">
-                    <span class="imp-name">${esc(r.cells[0] || "No name")}</span>
+                    <span class="imp-name">${esc(baseName(r.cells[0]) || "No name")}</span>
                     ${isMe(r) ? `<span class="imp-src">That's you, so you're kept</span>` : `
                     <select class="sel slim" onchange="impLinkRow('${r.uid}', this.value)" aria-label="Match to someone in the export">
                         <option value="">Same person as…</option>
@@ -2247,12 +2469,12 @@ function renderImportReview() {
 
         <div class="imp-sec">
             <h4>Updates (${changed.length})</h4>
-            <p>Same row, name and ratings. Only these details change.</p>
+            <p>Same row and ratings. Only these details change.</p>
             ${matched.length ? `<div class="imp-list">${(imp.showAll ? matched : changed).map(e => {
                 const r = linkedRow(e), ch = changesFor(r, e);
                 const wasAuto = imp.auto[e.idx] === r.uid;
                 return `<div class="imp-row">
-                    <span class="imp-name">${esc(r.cells[0])}</span>
+                    <span class="imp-name">${esc(baseName(r.cells[0]))}</span>
                     <span class="imp-chg">${ch.length ? ch.join(" · ") : "No changes"}</span>
                     ${wasAuto ? "" : `<span class="tag edit">Matched by you</span>`}
                     <button type="button" class="link-btn" onclick="impLink(${e.idx}, '')" title="Not the same person">Unmatch</button>
@@ -2299,6 +2521,7 @@ function applyImport() {
         const r = linkedRow(e);
         if (!r) return;
         if (changesFor(r, e).length) nUpd++;
+        if (renamesRow(r) && imp.names[e.idx] && imp.names[e.idx].name) r.cells[0] = imp.names[e.idx].name;
         r.cells[1] = e.pin;
         const oldRole = String(r.cells[2]).trim().toLowerCase();
         const custom = oldRole && oldRole !== "leader" && oldRole !== "member";
@@ -2812,6 +3035,7 @@ async function enterEditor() {
     try {
         const j = await autoLogin;
         auth.name = j.name;
+        auth.owners = Array.isArray(j.owners) ? j.owners : [];
         showWho();
         if (isEditorHash()) route();
     } catch (e) {
